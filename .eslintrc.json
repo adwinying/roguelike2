@@ -19,6 +19,16 @@
   "plugins": [
     "react"
   ],
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "map": [
+          ["@", "./src"]
+        ],
+        "extensions": [".ts", ".js", ".tsx"]
+      }
+    }
+  },
   "rules": {
     "no-continue": "off",
     "@typescript-eslint/no-unused-vars": [

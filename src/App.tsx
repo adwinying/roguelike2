@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import reactLogo from './assets/react.svg';
-import './App.css';
+import reactLogo from '@/assets/react.svg';
+import '@/App.css';
 
 export default function App({ name = 'world' }: { name?: string }) {
   const [count, setCount] = useState(0);
