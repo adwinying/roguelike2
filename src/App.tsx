@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 import reactLogo from '@/assets/react.svg';
-import '@/App.css';
 
 export default function App({ name = 'world' }: { name?: string }) {
   const [count, setCount] = useState(0);
@@ -16,7 +15,7 @@ export default function App({ name = 'world' }: { name?: string }) {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>
+      <h1 className="text-2xl">
         Hello
         {' '}
         {name}
