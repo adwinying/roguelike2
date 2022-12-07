@@ -1,0 +1,25 @@
+name: Vite
+
+on:
+  push:
+
+jobs:
+  unit_test:
+    name: Unit Test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v3
+      with:
+        node-version-file: '.nvmrc'
+        cache: 'npm'
+        check-latest: true
+
+    - name: Install node dependencies
+      run: npm ci
+
+    - name: Run unit tests
+      run: npm test
