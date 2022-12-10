@@ -172,3 +172,18 @@ export function generateMap(width: number, height: number): GameMap {
 
   return gameMap;
 }
+
+export function getRandomFloorCells(
+  gameMap: GameMap,
+  count: number
+): Coordinate[] {
+  const floorCells = [...gameMap.entries()]
+    .filter(([_, terrain]) => terrain === MapTerrain.Floor)
+    .map(([coor]) => CoordinateKey.toCoor(coor));
+
+  if (floorCells.length < count)
+    throw new Error("Not enough floor cells to get random floor cells");
+
+  // shuffle the array and return the first count elements
+  return floorCells.sort(() => Math.random() - 0.5).slice(0, count);
+}
