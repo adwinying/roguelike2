@@ -105,3 +105,28 @@ export function generateBoss(coordinate: Coordinate): Boss {
 }
 
 export type Sprite = Monster | Player | Health | Weapon | Exit | Boss;
+export function toSpriteMap({
+  player,
+  weapon,
+  monsters,
+  healths,
+  exit,
+  boss,
+}: {
+  player: Player;
+  weapon: Weapon;
+  monsters: Map<CoordinateKey, Monster>;
+  healths: Map<CoordinateKey, Health>;
+  exit?: Exit;
+  boss?: Boss;
+}): Map<CoordinateKey, Sprite> {
+  const sprites = new Map<CoordinateKey, Sprite>([...monsters, ...healths]);
+
+  sprites.set(CoordinateKey.fromCoor(player.coordinate), player);
+  sprites.set(CoordinateKey.fromCoor(weapon.coordinate), weapon);
+
+  if (exit) sprites.set(CoordinateKey.fromCoor(exit.coordinate), exit);
+  if (boss) sprites.set(CoordinateKey.fromCoor(boss.coordinate), boss);
+
+  return sprites;
+}
