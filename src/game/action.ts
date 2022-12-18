@@ -1,5 +1,6 @@
 import { Coordinate, CoordinateKey, GameMap, MapTerrain } from "@/game/map";
 import {
+  Boss,
   Exit,
   Health,
   Monster,
@@ -7,6 +8,53 @@ import {
   toSpriteMap,
   Weapon,
 } from "@/game/sprite";
+
+const config = {
+  minAttackMultiplier: 0.7,
+  maxAttackMultiplier: 1.3,
+  minDefenseMultiplier: 0.7,
+  maxDefenseMultiplier: 1.3,
+};
+
+export function getBattleOutcome(player: Player, monster: Monster | Boss) {
+  const {
+    minAttackMultiplier,
+    maxAttackMultiplier,
+    minDefenseMultiplier,
+    maxDefenseMultiplier,
+  } = config;
+
+  const attackMultiplierRange = maxAttackMultiplier - minAttackMultiplier;
+  const defenseMultiplierRange = maxDefenseMultiplier - minDefenseMultiplier;
+
+  const playerAttackMultiplier =
+    Math.random() * attackMultiplierRange + minAttackMultiplier;
+  const playerDefenseMultiplier =
+    Math.random() * defenseMultiplierRange + minDefenseMultiplier;
+  const monsterAttackMultiplier =
+    Math.random() * attackMultiplierRange + minAttackMultiplier;
+  const monsterDefenseMultiplier =
+    Math.random() * defenseMultiplierRange + minDefenseMultiplier;
+
+  const playerAttack = Math.round(player.attack * playerAttackMultiplier);
+  const playerDefense = Math.round(player.defense * playerDefenseMultiplier);
+  const monsterAttack = Math.round(monster.attack * monsterAttackMultiplier);
+  const monsterDefense = Math.round(monster.defense * monsterDefenseMultiplier);
+
+  const monsterDamage = Math.max(playerAttack - monsterDefense, 0);
+  const monsterHealth = Math.max(monster.health - monsterDamage, 0);
+
+  const playerDamage =
+    monsterHealth === 0 ? 0 : Math.max(monsterAttack - playerDefense, 0);
+  const playerHealth = Math.max(player.health - playerDamage, 0);
+
+  return {
+    playerDamage,
+    monsterDamage,
+    playerHealth,
+    monsterHealth,
+  };
+}
 
 export function computeMove(
   {
