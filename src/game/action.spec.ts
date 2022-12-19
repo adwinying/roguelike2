@@ -1,5 +1,5 @@
 import { computeMove, getBattleOutcome } from "@/game/action";
-import { MapTerrain } from "@/game/map";
+import { CoordinateKey, MapTerrain } from "@/game/map";
 
 describe("action", () => {
   describe("getBattleOutcome", () => {
@@ -211,6 +211,49 @@ describe("action", () => {
       expect(result).toEqual({
         type: "movement",
         playerCoor: { x: 1, y: 2 },
+      });
+    });
+
+    it("returns target coordinate and new player health when target cell is health", () => {
+      const playerHealth = 10;
+      const healthHealth = 15;
+
+      const map = new Map();
+      map.set("1,1", MapTerrain.Floor);
+      map.set("1,2", MapTerrain.Floor);
+
+      const sprites = {
+        player: {
+          type: "player" as const,
+          coordinate: { x: 1, y: 1 },
+          health: playerHealth,
+          attack: 10,
+          defense: 10,
+        },
+        weapon: {
+          type: "weapon" as const,
+          coordinate: { x: 1, y: 1 },
+          attack: 15,
+        },
+        monsters: new Map(),
+        healths: new Map([
+          [
+            CoordinateKey.fromCoor({ x: 1, y: 2 }),
+            {
+              type: "health" as const,
+              coordinate: { x: 1, y: 2 },
+              health: healthHealth,
+            },
+          ],
+        ]),
+      };
+
+      const result = computeMove({ map, sprites }, "down");
+
+      expect(result).toEqual({
+        type: "health",
+        playerCoor: { x: 1, y: 2 },
+        playerHealth: playerHealth + healthHealth,
       });
     });
   });

@@ -98,6 +98,13 @@ export function computeMove(
       playerCoor: targetCoor,
     };
 
+  if (targetCell.type === "health")
+    return {
+      type: "health" as const,
+      playerCoor: targetCoor,
+      playerHealth: sprites.player.health + targetCell.health,
+    };
+
   return undefined;
 }
 
