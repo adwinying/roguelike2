@@ -105,6 +105,13 @@ export function computeMove(
       playerHealth: sprites.player.health + targetCell.health,
     };
 
+  if (targetCell.type === "weapon")
+    return {
+      type: "weapon" as const,
+      playerCoor: targetCoor,
+      playerAttack: sprites.player.attack + targetCell.attack,
+    };
+
   return undefined;
 }
 

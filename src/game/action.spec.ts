@@ -214,7 +214,7 @@ describe("action", () => {
       });
     });
 
-    it("returns target coordinate and new player health when target cell is health", () => {
+    it("returns target coordinate and player health when target cell is health", () => {
       const playerHealth = 10;
       const healthHealth = 15;
 
@@ -254,6 +254,40 @@ describe("action", () => {
         type: "health",
         playerCoor: { x: 1, y: 2 },
         playerHealth: playerHealth + healthHealth,
+      });
+    });
+
+    it("returns target coordinate and player new attack when target cell is weapon", () => {
+      const playerAttack = 10;
+      const weaponAttack = 15;
+
+      const map = new Map();
+      map.set("1,1", MapTerrain.Floor);
+      map.set("1,2", MapTerrain.Floor);
+
+      const sprites = {
+        player: {
+          type: "player" as const,
+          coordinate: { x: 1, y: 1 },
+          health: 10,
+          attack: playerAttack,
+          defense: 10,
+        },
+        weapon: {
+          type: "weapon" as const,
+          coordinate: { x: 1, y: 2 },
+          attack: weaponAttack,
+        },
+        monsters: new Map(),
+        healths: new Map(),
+      };
+
+      const result = computeMove({ map, sprites }, "down");
+
+      expect(result).toEqual({
+        type: "weapon",
+        playerCoor: { x: 1, y: 2 },
+        playerAttack: playerAttack + weaponAttack,
       });
     });
   });
