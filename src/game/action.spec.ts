@@ -290,5 +290,172 @@ describe("action", () => {
         playerAttack: playerAttack + weaponAttack,
       });
     });
+
+    it("returns defeat when target cell is monster and player runs out of health", () => {
+      const map = new Map();
+      map.set("1,1", MapTerrain.Floor);
+      map.set("1,2", MapTerrain.Floor);
+
+      const sprites = {
+        player: {
+          type: "player" as const,
+          coordinate: { x: 1, y: 1 },
+          health: 1,
+          attack: 1,
+          defense: 1,
+        },
+        weapon: {
+          type: "weapon" as const,
+          coordinate: { x: 1, y: 1 },
+          attack: 15,
+        },
+        monsters: new Map([
+          [
+            CoordinateKey.fromCoor({ x: 1, y: 2 }),
+            {
+              type: "monster" as const,
+              coordinate: { x: 1, y: 2 },
+              health: 1000,
+              attack: 1000,
+              defense: 1000,
+            },
+          ],
+        ]),
+        healths: new Map(),
+      };
+
+      const result = computeMove({ map, sprites }, "down");
+
+      expect(result).toEqual({
+        type: "defeat",
+      });
+    });
+
+    it("returns victory when target cell is boss and defeated", () => {
+      const map = new Map();
+      map.set("1,1", MapTerrain.Floor);
+      map.set("1,2", MapTerrain.Floor);
+
+      const sprites = {
+        player: {
+          type: "player" as const,
+          coordinate: { x: 1, y: 1 },
+          health: 1000,
+          attack: 1000,
+          defense: 1000,
+        },
+        weapon: {
+          type: "weapon" as const,
+          coordinate: { x: 1, y: 1 },
+          attack: 15,
+        },
+        monsters: new Map(),
+        healths: new Map(),
+        boss: {
+          type: "boss" as const,
+          coordinate: { x: 1, y: 2 },
+          health: 1,
+          attack: 1,
+          defense: 1,
+        },
+      };
+
+      const result = computeMove({ map, sprites }, "down");
+
+      expect(result).toEqual({
+        type: "victory",
+      });
+    });
+
+    it("returns kill and player/monster stats when target cell is monster and defeated", () => {
+      const map = new Map();
+      map.set("1,1", MapTerrain.Floor);
+      map.set("1,2", MapTerrain.Floor);
+
+      const sprites = {
+        player: {
+          type: "player" as const,
+          coordinate: { x: 1, y: 1 },
+          health: 10,
+          attack: 1000,
+          defense: 10,
+        },
+        weapon: {
+          type: "weapon" as const,
+          coordinate: { x: 1, y: 1 },
+          attack: 15,
+        },
+        monsters: new Map([
+          [
+            CoordinateKey.fromCoor({ x: 1, y: 2 }),
+            {
+              type: "monster" as const,
+              coordinate: { x: 1, y: 2 },
+              health: 1,
+              attack: 1000,
+              defense: 1,
+            },
+          ],
+        ]),
+        healths: new Map(),
+      };
+
+      const result = computeMove({ map, sprites }, "down");
+
+      expect(result?.playerCoor).toEqual(sprites.player.coordinate);
+      expect(result?.monsterCoor).toEqual(
+        [...sprites.monsters.values()][0].coordinate
+      );
+
+      expect(result?.playerHealth).toEqual(sprites.player.health);
+      expect(result?.playerDamage).toEqual(0);
+      expect(result?.monsterHealth).toEqual(0);
+      expect(result?.monsterDamage).toBeGreaterThan(0);
+    });
+
+    it("returns battle and player/monster stats when target cell is monster and not defeated", () => {
+      const map = new Map();
+      map.set("1,1", MapTerrain.Floor);
+      map.set("1,2", MapTerrain.Floor);
+
+      const sprites = {
+        player: {
+          type: "player" as const,
+          coordinate: { x: 1, y: 1 },
+          health: 100,
+          attack: 10,
+          defense: 5,
+        },
+        weapon: {
+          type: "weapon" as const,
+          coordinate: { x: 1, y: 1 },
+          attack: 15,
+        },
+        monsters: new Map([
+          [
+            CoordinateKey.fromCoor({ x: 1, y: 2 }),
+            {
+              type: "monster" as const,
+              coordinate: { x: 1, y: 2 },
+              health: 100,
+              attack: 10,
+              defense: 5,
+            },
+          ],
+        ]),
+        healths: new Map(),
+      };
+
+      const result = computeMove({ map, sprites }, "down");
+      const monster = [...sprites.monsters.values()][0];
+
+      expect(result?.playerCoor).toEqual(sprites.player.coordinate);
+      expect(result?.monsterCoor).toEqual(monster.coordinate);
+
+      expect(result?.playerHealth).toBeLessThan(sprites.player.health);
+      expect(result?.playerDamage).toBeGreaterThan(0);
+      expect(result?.monsterHealth).toBeLessThan(monster.health);
+      expect(result?.monsterDamage).toBeGreaterThan(0);
+    });
   });
 });

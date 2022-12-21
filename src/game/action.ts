@@ -67,7 +67,8 @@ export function computeMove(
       weapon: Weapon;
       monsters: Map<CoordinateKey, Monster>;
       healths: Map<CoordinateKey, Health>;
-      exit: Exit;
+      exit?: Exit;
+      boss?: Boss;
     };
   },
   direction: "up" | "down" | "left" | "right"
@@ -111,6 +112,42 @@ export function computeMove(
       playerCoor: targetCoor,
       playerAttack: sprites.player.attack + targetCell.attack,
     };
+
+  if (targetCell.type === "monster" || targetCell.type === "boss") {
+    const { playerDamage, monsterDamage, playerHealth, monsterHealth } =
+      getBattleOutcome(sprites.player, targetCell);
+
+    if (playerHealth === 0)
+      return {
+        type: "defeat" as const,
+      };
+
+    if (monsterHealth === 0 && targetCell.type === "boss")
+      return {
+        type: "victory" as const,
+      };
+
+    if (monsterHealth === 0 && targetCell.type === "monster")
+      return {
+        type: "kill" as const,
+        playerCoor: sprites.player.coordinate,
+        playerHealth,
+        playerDamage,
+        monsterCoor: targetCoor,
+        monsterHealth,
+        monsterDamage,
+      };
+
+    return {
+      type: "battle" as const,
+      playerCoor: sprites.player.coordinate,
+      playerHealth,
+      playerDamage,
+      monsterCoor: targetCoor,
+      monsterHealth,
+      monsterDamage,
+    };
+  }
 
   return undefined;
 }
