@@ -457,5 +457,38 @@ describe("action", () => {
       expect(result?.monsterHealth).toBeLessThan(monster.health);
       expect(result?.monsterDamage).toBeGreaterThan(0);
     });
+
+    it("returns exit when target cell is exit", () => {
+      const map = new Map();
+      map.set("1,1", MapTerrain.Floor);
+      map.set("1,2", MapTerrain.Floor);
+
+      const sprites = {
+        player: {
+          type: "player" as const,
+          coordinate: { x: 1, y: 1 },
+          health: 100,
+          attack: 10,
+          defense: 5,
+        },
+        weapon: {
+          type: "weapon" as const,
+          coordinate: { x: 1, y: 1 },
+          attack: 15,
+        },
+        monsters: new Map(),
+        healths: new Map(),
+        exit: {
+          type: "exit" as const,
+          coordinate: { x: 1, y: 2 },
+        },
+      };
+
+      const result = computeMove({ map, sprites }, "down");
+
+      expect(result).toEqual({
+        type: "exit",
+      });
+    });
   });
 });

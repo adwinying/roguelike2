@@ -149,6 +149,11 @@ export function computeMove(
     };
   }
 
+  if (targetCell.type === "exit")
+    return {
+      type: "exit" as const,
+    };
+
   return undefined;
 }
 
