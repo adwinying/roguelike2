@@ -1,22 +1,19 @@
-import zustand from "zustand";
+import { useAtom } from "jotai";
+import { atomWithImmer } from "jotai/immer";
+import { useMemo } from "react";
 
-import { CoordinateKey } from "@/game/map";
-import { Sprite, toSpriteMap } from "@/game/sprite";
+import { toSpriteMap } from "@/game/sprite";
 import { initGameState } from "@/game/state";
 
-export const useGame = zustand<
-  ReturnType<typeof initGameState> & {
-    computed: {
-      spriteMap: Map<CoordinateKey, Sprite>;
-    };
-  }
->((_, get) => ({
-  ...initGameState(),
-  computed: {
-    get spriteMap() {
-      return toSpriteMap(get().sprites);
-    },
-  },
-}));
+const gameAtom = atomWithImmer(initGameState());
 
-export default null;
+export default function useGame() {
+  const [{ map: gameMap, sprites }] = useAtom(gameAtom);
+
+  const spriteMap = useMemo(() => toSpriteMap(sprites), [sprites]);
+
+  return {
+    gameMap,
+    spriteMap,
+  };
+}

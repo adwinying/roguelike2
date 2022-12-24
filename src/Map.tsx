@@ -1,7 +1,7 @@
 import { Coordinate, CoordinateKey, MapTerrain } from "@/game/map";
 import { Sprite } from "@/game/sprite";
 import { config as gameConfig } from "@/game/state";
-import { useGame } from "@/useGame";
+import useGame from "@/useGame";
 
 function MapCell({ cellType }: { cellType: MapTerrain | Sprite["type"] }) {
   const cellColor = {
@@ -19,8 +19,7 @@ function MapCell({ cellType }: { cellType: MapTerrain | Sprite["type"] }) {
 }
 
 export default function Map({ className = "" }: { className?: string }) {
-  const gameMap = useGame(({ map }) => map);
-  const spriteMap = useGame(({ computed }) => computed.spriteMap);
+  const { gameMap, spriteMap } = useGame();
 
   const getCellType = (coor: Coordinate) => {
     const coorKey = CoordinateKey.fromCoor(coor);
