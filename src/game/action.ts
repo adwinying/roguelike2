@@ -1,13 +1,6 @@
-import { Coordinate, CoordinateKey, GameMap, MapTerrain } from "@/game/map";
-import {
-  Boss,
-  Exit,
-  Health,
-  Monster,
-  Player,
-  toSpriteMap,
-  Weapon,
-} from "@/game/sprite";
+import { Coordinate, CoordinateKey, MapTerrain } from "@/game/map";
+import { Boss, Monster, Player, toSpriteMap } from "@/game/sprite";
+import { GameState } from "@/game/state";
 
 const config = {
   minAttackMultiplier: 0.7,
@@ -57,20 +50,7 @@ export function getBattleOutcome(player: Player, monster: Monster | Boss) {
 }
 
 export function computeMove(
-  {
-    map,
-    sprites,
-  }: {
-    map: GameMap;
-    sprites: {
-      player: Player;
-      weapon: Weapon;
-      monsters: Map<CoordinateKey, Monster>;
-      healths: Map<CoordinateKey, Health>;
-      exit?: Exit;
-      boss?: Boss;
-    };
-  },
+  { map, sprites }: GameState,
   direction: "up" | "down" | "left" | "right"
 ) {
   const spriteMap = toSpriteMap(sprites);

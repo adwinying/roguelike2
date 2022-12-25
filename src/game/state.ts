@@ -1,5 +1,6 @@
 import { generateMap, getRandomFloorCells } from "@/game/map";
 import {
+  generateBoss,
   generateExit,
   generateHealths,
   generateMonsters,
@@ -14,7 +15,18 @@ export const config = {
   numOfHealths: 6,
 };
 
-export function initGameState() {
+export type GameState = {
+  map: ReturnType<typeof generateMap>;
+  sprites: {
+    player: ReturnType<typeof generatePlayer>;
+    weapon?: ReturnType<typeof generateWeapon>;
+    exit?: ReturnType<typeof generateExit>;
+    boss?: ReturnType<typeof generateBoss>;
+    healths: ReturnType<typeof generateHealths>;
+    monsters: ReturnType<typeof generateMonsters>;
+  };
+};
+export function initGameState(): GameState {
   const map = generateMap(config.mapWidth, config.mapHeight);
   // 3 for player, weapon, and exit/boss
   const numOfSprites = config.numOfMonsters + config.numOfHealths + 3;

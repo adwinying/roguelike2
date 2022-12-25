@@ -114,7 +114,7 @@ export function toSpriteMap({
   boss,
 }: {
   player: Player;
-  weapon: Weapon;
+  weapon?: Weapon;
   monsters: Map<CoordinateKey, Monster>;
   healths: Map<CoordinateKey, Health>;
   exit?: Exit;
@@ -123,8 +123,8 @@ export function toSpriteMap({
   const sprites = new Map<CoordinateKey, Sprite>([...monsters, ...healths]);
 
   sprites.set(CoordinateKey.fromCoor(player.coordinate), player);
-  sprites.set(CoordinateKey.fromCoor(weapon.coordinate), weapon);
 
+  if (weapon) sprites.set(CoordinateKey.fromCoor(weapon.coordinate), weapon);
   if (exit) sprites.set(CoordinateKey.fromCoor(exit.coordinate), exit);
   if (boss) sprites.set(CoordinateKey.fromCoor(boss.coordinate), boss);
 

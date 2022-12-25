@@ -98,11 +98,6 @@ describe("action", () => {
           attack: 10,
           defense: 10,
         },
-        weapon: {
-          type: "weapon" as const,
-          coordinate: { x: 1, y: 1 },
-          attack: 15,
-        },
         monsters: new Map(),
         healths: new Map(),
       };
@@ -140,11 +135,6 @@ describe("action", () => {
           attack: 10,
           defense: 10,
         },
-        weapon: {
-          type: "weapon" as const,
-          coordinate: { x: 1, y: 1 },
-          attack: 15,
-        },
         monsters: new Map(),
         healths: new Map(),
       };
@@ -166,11 +156,6 @@ describe("action", () => {
           health: 10,
           attack: 10,
           defense: 10,
-        },
-        weapon: {
-          type: "weapon" as const,
-          coordinate: { x: 1, y: 1 },
-          attack: 15,
         },
         monsters: new Map(),
         healths: new Map(),
@@ -196,11 +181,6 @@ describe("action", () => {
           health: 10,
           attack: 10,
           defense: 10,
-        },
-        weapon: {
-          type: "weapon" as const,
-          coordinate: { x: 1, y: 1 },
-          attack: 15,
         },
         monsters: new Map(),
         healths: new Map(),
@@ -229,11 +209,6 @@ describe("action", () => {
           health: playerHealth,
           attack: 10,
           defense: 10,
-        },
-        weapon: {
-          type: "weapon" as const,
-          coordinate: { x: 1, y: 1 },
-          attack: 15,
         },
         monsters: new Map(),
         healths: new Map([
@@ -304,11 +279,6 @@ describe("action", () => {
           attack: 1,
           defense: 1,
         },
-        weapon: {
-          type: "weapon" as const,
-          coordinate: { x: 1, y: 1 },
-          attack: 15,
-        },
         monsters: new Map([
           [
             CoordinateKey.fromCoor({ x: 1, y: 2 }),
@@ -344,11 +314,6 @@ describe("action", () => {
           attack: 1000,
           defense: 1000,
         },
-        weapon: {
-          type: "weapon" as const,
-          coordinate: { x: 1, y: 1 },
-          attack: 15,
-        },
         monsters: new Map(),
         healths: new Map(),
         boss: {
@@ -379,11 +344,6 @@ describe("action", () => {
           health: 10,
           attack: 1000,
           defense: 10,
-        },
-        weapon: {
-          type: "weapon" as const,
-          coordinate: { x: 1, y: 1 },
-          attack: 15,
         },
         monsters: new Map([
           [
@@ -426,11 +386,6 @@ describe("action", () => {
           attack: 10,
           defense: 5,
         },
-        weapon: {
-          type: "weapon" as const,
-          coordinate: { x: 1, y: 1 },
-          attack: 15,
-        },
         monsters: new Map([
           [
             CoordinateKey.fromCoor({ x: 1, y: 2 }),
@@ -470,11 +425,6 @@ describe("action", () => {
           health: 100,
           attack: 10,
           defense: 5,
-        },
-        weapon: {
-          type: "weapon" as const,
-          coordinate: { x: 1, y: 1 },
-          attack: 15,
         },
         monsters: new Map(),
         healths: new Map(),
