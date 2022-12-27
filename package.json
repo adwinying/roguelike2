@@ -17,7 +17,8 @@
     "immer": "^9.0.16",
     "jotai": "^1.9.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.0"
   },
   "devDependencies": {
     "@types/node": "^18.11.9",
