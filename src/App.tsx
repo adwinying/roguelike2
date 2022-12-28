@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 
 import Map from "@/Map";
 import useGame from "@/useGame";
@@ -40,6 +41,8 @@ export default function App() {
       <h1 className="py-8 text-4xl font-bold">Roguelike</h1>
 
       <Map className="mx-auto" />
+
+      <Toaster position="bottom-left" />
     </div>
   );
 }
