@@ -29,9 +29,11 @@ export default function Toast({
     >
       <div className="flex items-start">
         <div>{icon}</div>
-        <div>
+        <div className="text-left">
           <h3 className="font-bold">{title}</h3>
-          {content ? <div className="text-xs">{content}</div> : null}
+          {content ? (
+            <div className="whitespace-pre-line text-xs">{content}</div>
+          ) : null}
         </div>
       </div>
     </div>

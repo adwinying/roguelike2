@@ -6,11 +6,14 @@ import { computeMove } from "@/game/action";
 import { CoordinateKey } from "@/game/map";
 import { toSpriteMap } from "@/game/sprite";
 import { initGameState } from "@/game/state";
+import useToast from "@/useToast";
 
 const gameAtom = atomWithImmer(initGameState());
 
 export default function useGame() {
   const [{ map: gameMap, sprites }, updateGameState] = useAtom(gameAtom);
+  const { sendHealthToast, sendWeaponToast, sendBattleToast, sendDefeatToast } =
+    useToast();
 
   const spriteMap = useMemo(() => toSpriteMap(sprites), [sprites]);
 
@@ -49,6 +52,7 @@ export default function useGame() {
             CoordinateKey.fromCoor(result.monsterCoor)
           );
         });
+        sendDefeatToast(result.monsterCoor);
 
         return;
       }
@@ -69,6 +73,13 @@ export default function useGame() {
           targetMonster.health = result.monsterHealth;
           draft.sprites.player.health = result.playerHealth;
         });
+        sendBattleToast(
+          result.monsterCoor,
+          result.playerDamage,
+          result.monsterDamage,
+          result.playerHealth,
+          result.monsterHealth
+        );
 
         return;
       }
@@ -81,6 +92,7 @@ export default function useGame() {
             CoordinateKey.fromCoor(result.playerCoor)
           );
         });
+        sendHealthToast(result.playerHealth - sprites.player.health);
 
         return;
       }
@@ -91,6 +103,7 @@ export default function useGame() {
           draft.sprites.player.attack = result.playerAttack;
           draft.sprites.weapon = undefined;
         });
+        sendWeaponToast(result.playerAttack - sprites.player.attack);
 
         return;
       }
@@ -105,7 +118,16 @@ export default function useGame() {
 
       throw new Error("Unknown result type");
     },
-    [gameMap, sprites, updateGameState, resetGame]
+    [
+      gameMap,
+      sprites,
+      updateGameState,
+      resetGame,
+      sendWeaponToast,
+      sendHealthToast,
+      sendBattleToast,
+      sendDefeatToast,
+    ]
   );
 
   return {
