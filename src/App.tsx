@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 
 import Map from "@/Map";
+import Stats from "@/Stats";
 import useGame from "@/useGame";
 
 export default function App() {
@@ -37,8 +38,10 @@ export default function App() {
   }, [triggerMove]);
 
   return (
-    <div className="min-h-screen text-center">
-      <h1 className="py-8 text-4xl font-bold">Roguelike</h1>
+    <div className="min-h-screen px-3 text-center">
+      <h1 className="pt-8 pb-4 text-4xl font-bold">Roguelike</h1>
+
+      <Stats className="mb-4" />
 
       <Map className="mx-auto" />
 

@@ -131,6 +131,7 @@ export default function useGame() {
   );
 
   return {
+    player: sprites.player,
     gameMap,
     spriteMap,
     triggerMove,
