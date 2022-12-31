@@ -6,16 +6,18 @@ import {
   generateMonsters,
   generatePlayer,
   generateWeapon,
+  Level,
 } from "@/game/sprite";
 
 describe("sprite", () => {
   describe("generateMonsters", () => {
     it("should generate monsters at the given coordinates", () => {
+      const level = 1;
       const coordinates = [
         { x: 1, y: 1 },
         { x: 2, y: 2 },
       ];
-      const monsters = generateMonsters(coordinates);
+      const monsters = generateMonsters(level, coordinates);
 
       expect(monsters.size).toBe(coordinates.length);
       expect(monsters.get(CoordinateKey.fromCoor(coordinates[0]))).toEqual({
@@ -33,6 +35,29 @@ describe("sprite", () => {
         attack: 3,
       });
     });
+
+    it.each([
+      [1, 10, 1, 3],
+      [2, 12, 1, 4],
+      [3, 14, 2, 5],
+      [4, 16, 2, 6],
+      [5, 18, 3, 7],
+    ] as [Level, number, number, number][])(
+      "should generate monsters at level %i with health %i, defense %i, and attack %i",
+      (level, health, defense, attack) => {
+        const coordinates = [
+          { x: 1, y: 1 },
+          { x: 2, y: 2 },
+        ];
+        const monsters = generateMonsters(level, coordinates);
+
+        monsters.forEach((monster) => {
+          expect(monster.health).toEqual(health);
+          expect(monster.defense).toEqual(defense);
+          expect(monster.attack).toEqual(attack);
+        });
+      }
+    );
   });
 
   describe("generatePlayer", () => {
@@ -52,12 +77,13 @@ describe("sprite", () => {
 
   describe("generateHealths", () => {
     it("should generate healths at the given coordinates", () => {
+      const level = 1;
       const coordinates = [
         { x: 1, y: 1 },
         { x: 2, y: 2 },
         { x: 3, y: 3 },
       ];
-      const healths = generateHealths(coordinates);
+      const healths = generateHealths(level, coordinates);
 
       expect(healths.size).toBe(coordinates.length);
       expect(healths.get(CoordinateKey.fromCoor(coordinates[0]))).toEqual({
@@ -76,15 +102,54 @@ describe("sprite", () => {
         health: 10,
       });
     });
+
+    it.each([
+      [1, 10],
+      [2, 12],
+      [3, 14],
+      [4, 16],
+      [5, 18],
+    ] as [Level, number][])(
+      "should generate health at level %i with health %i",
+      (level, health) => {
+        const coordinates = [
+          { x: 1, y: 1 },
+          { x: 2, y: 2 },
+          { x: 3, y: 3 },
+        ];
+        const healthSprites = generateHealths(level, coordinates);
+
+        healthSprites.forEach((sprite) => {
+          expect(sprite.health).toEqual(health);
+        });
+      }
+    );
   });
 
   describe("generateWeapon", () => {
     it("should generate a weapon at the given coordinate", () => {
+      const level = 1;
       const coordinate = { x: 1, y: 1 };
-      const weapon = generateWeapon(coordinate);
+      const weapon = generateWeapon(level, coordinate);
 
-      expect(weapon).toEqual({ type: "weapon", coordinate, attack: 8 });
+      expect(weapon).toEqual({ type: "weapon", coordinate, attack: 3 });
     });
+
+    it.each([
+      [1, 3],
+      [2, 3],
+      [3, 3],
+      [4, 3],
+      [5, 4],
+    ] as [Level, number][])(
+      "should generate a weapon at level %i with attack %i",
+      (level, attack) => {
+        const coordinate = { x: 1, y: 1 };
+        const weapon = generateWeapon(level, coordinate);
+
+        expect(weapon.attack).toEqual(attack);
+      }
+    );
   });
 
   describe("generateExit", () => {
