@@ -50,7 +50,7 @@ export function getBattleOutcome(player: Player, monster: Monster | Boss) {
 }
 
 export function computeMove(
-  { map, sprites }: GameState,
+  { map, sprites }: Omit<GameState, "level">,
   direction: "up" | "down" | "left" | "right"
 ) {
   const spriteMap = toSpriteMap(sprites);

@@ -1,7 +1,7 @@
 import useGame from "@/useGame";
 
 export default function Stats({ className = "" }: { className?: string }) {
-  const { player } = useGame();
+  const { player, level } = useGame();
 
   return (
     <div className={`stats auto-cols-fr shadow-lg ${className}`}>
@@ -31,7 +31,7 @@ export default function Stats({ className = "" }: { className?: string }) {
 
       <div className="stat px-3 py-2 md:px-6 md:py-4">
         <div className="stat-title">LVL</div>
-        <div className="stat-value">1</div>
+        <div className="stat-value">{level}</div>
         <div className="stat-desc">Out of 5</div>
       </div>
     </div>

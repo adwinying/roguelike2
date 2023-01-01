@@ -4,26 +4,34 @@ import { useCallback, useMemo } from "react";
 
 import { computeMove } from "@/game/action";
 import { CoordinateKey } from "@/game/map";
-import { toSpriteMap } from "@/game/sprite";
+import { Level, toSpriteMap } from "@/game/sprite";
 import { initGameState } from "@/game/state";
 import useToast from "@/useToast";
 
-const gameAtom = atomWithImmer(initGameState());
+const gameAtom = atomWithImmer(initGameState(1));
 
 export default function useGame() {
-  const [{ map: gameMap, sprites }, updateGameState] = useAtom(gameAtom);
+  const [{ level, map: gameMap, sprites }, updateGameState] = useAtom(gameAtom);
   const { sendHealthToast, sendWeaponToast, sendBattleToast, sendDefeatToast } =
     useToast();
 
   const spriteMap = useMemo(() => toSpriteMap(sprites), [sprites]);
 
-  const resetGame = useCallback(() => {
-    updateGameState((draft) => {
-      const newGame = initGameState();
-      draft.map = newGame.map;
-      draft.sprites = newGame.sprites;
-    });
-  }, [updateGameState]);
+  const resetGame = useCallback(
+    (overrideLevel?: Level) => {
+      updateGameState((draft) => {
+        const newLevel = overrideLevel ?? ((level + 1) as Level);
+        const newGame = initGameState(
+          newLevel,
+          newLevel > 1 ? sprites.player : undefined
+        );
+        draft.level = newLevel;
+        draft.map = newGame.map;
+        draft.sprites = newGame.sprites;
+      });
+    },
+    [level, sprites.player, updateGameState]
+  );
 
   const triggerMove = useCallback(
     (direction: "up" | "down" | "left" | "right") => {
@@ -32,12 +40,12 @@ export default function useGame() {
       if (result === undefined) return;
 
       if (result.type === "defeat") {
-        resetGame();
+        resetGame(1);
         return;
       }
 
       if (result.type === "victory") {
-        resetGame();
+        resetGame(1);
         return;
       }
 
@@ -131,6 +139,7 @@ export default function useGame() {
   );
 
   return {
+    level,
     player: sprites.player,
     gameMap,
     spriteMap,
