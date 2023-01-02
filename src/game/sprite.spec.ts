@@ -26,6 +26,7 @@ describe("sprite", () => {
         health: 10,
         defense: 1,
         attack: 3,
+        exp: 10,
       });
       expect(monsters.get(CoordinateKey.fromCoor(coordinates[1]))).toEqual({
         type: "monster",
@@ -33,18 +34,19 @@ describe("sprite", () => {
         health: 10,
         defense: 1,
         attack: 3,
+        exp: 10,
       });
     });
 
     it.each([
-      [1, 10, 1, 3],
-      [2, 12, 1, 4],
-      [3, 14, 2, 5],
-      [4, 16, 2, 6],
-      [5, 18, 3, 7],
-    ] as [Level, number, number, number][])(
-      "should generate monsters at level %i with health %i, defense %i, and attack %i",
-      (level, health, defense, attack) => {
+      [1, 10, 1, 3, 10],
+      [2, 12, 1, 4, 15],
+      [3, 14, 2, 5, 20],
+      [4, 16, 2, 6, 25],
+      [5, 18, 3, 7, 30],
+    ] as [Level, number, number, number, number][])(
+      "should generate monsters at level %i with health %i, defense %i, attack %i and exp %i",
+      (level, health, defense, attack, exp) => {
         const coordinates = [
           { x: 1, y: 1 },
           { x: 2, y: 2 },
@@ -55,6 +57,7 @@ describe("sprite", () => {
           expect(monster.health).toEqual(health);
           expect(monster.defense).toEqual(defense);
           expect(monster.attack).toEqual(attack);
+          expect(monster.exp).toEqual(exp);
         });
       }
     );
@@ -71,6 +74,8 @@ describe("sprite", () => {
         health: 10,
         defense: 2,
         attack: 3,
+        currExp: 0,
+        maxExp: 50,
       });
     });
   });

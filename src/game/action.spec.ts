@@ -10,6 +10,8 @@ describe("action", () => {
         attack: 11,
         defense: 12,
         health: 100,
+        currExp: 0,
+        maxExp: 50,
       };
       const monster = {
         type: "monster" as const,
@@ -17,6 +19,7 @@ describe("action", () => {
         attack: 13,
         defense: 14,
         health: 100,
+        exp: 10,
       };
 
       const outcome = getBattleOutcome(player, monster);
@@ -37,6 +40,8 @@ describe("action", () => {
         attack: 11,
         defense: 12,
         health: 1,
+        currExp: 0,
+        maxExp: 50,
       };
       const monster = {
         type: "monster" as const,
@@ -44,6 +49,7 @@ describe("action", () => {
         attack: 13,
         defense: 14,
         health: 1,
+        exp: 10,
       };
 
       const outcome = getBattleOutcome(player, monster);
@@ -59,6 +65,8 @@ describe("action", () => {
         attack: 13,
         defense: 14,
         health: 100,
+        currExp: 0,
+        maxExp: 50,
       };
       const monster = {
         type: "monster" as const,
@@ -66,6 +74,7 @@ describe("action", () => {
         attack: 1000,
         defense: 1,
         health: 1,
+        exp: 10,
       };
 
       const outcome = getBattleOutcome(player, monster);
@@ -97,6 +106,8 @@ describe("action", () => {
           health: 10,
           attack: 10,
           defense: 10,
+          currExp: 0,
+          maxExp: 50,
         },
         monsters: new Map(),
         healths: new Map(),
@@ -134,6 +145,8 @@ describe("action", () => {
           health: 10,
           attack: 10,
           defense: 10,
+          currExp: 0,
+          maxExp: 50,
         },
         monsters: new Map(),
         healths: new Map(),
@@ -156,6 +169,8 @@ describe("action", () => {
           health: 10,
           attack: 10,
           defense: 10,
+          currExp: 0,
+          maxExp: 50,
         },
         monsters: new Map(),
         healths: new Map(),
@@ -181,6 +196,8 @@ describe("action", () => {
           health: 10,
           attack: 10,
           defense: 10,
+          currExp: 0,
+          maxExp: 50,
         },
         monsters: new Map(),
         healths: new Map(),
@@ -209,6 +226,8 @@ describe("action", () => {
           health: playerHealth,
           attack: 10,
           defense: 10,
+          currExp: 0,
+          maxExp: 50,
         },
         monsters: new Map(),
         healths: new Map([
@@ -247,6 +266,8 @@ describe("action", () => {
           health: 10,
           attack: playerAttack,
           defense: 10,
+          currExp: 0,
+          maxExp: 50,
         },
         weapon: {
           type: "weapon" as const,
@@ -278,6 +299,8 @@ describe("action", () => {
           health: 1,
           attack: 1,
           defense: 1,
+          currExp: 0,
+          maxExp: 50,
         },
         monsters: new Map([
           [
@@ -288,6 +311,7 @@ describe("action", () => {
               health: 1000,
               attack: 1000,
               defense: 1000,
+              exp: 10,
             },
           ],
         ]),
@@ -313,6 +337,8 @@ describe("action", () => {
           health: 1000,
           attack: 1000,
           defense: 1000,
+          currExp: 0,
+          maxExp: 50,
         },
         monsters: new Map(),
         healths: new Map(),
@@ -344,6 +370,8 @@ describe("action", () => {
           health: 10,
           attack: 1000,
           defense: 10,
+          currExp: 0,
+          maxExp: 50,
         },
         monsters: new Map([
           [
@@ -354,6 +382,7 @@ describe("action", () => {
               health: 1,
               attack: 1000,
               defense: 1,
+              exp: 10,
             },
           ],
         ]),
@@ -385,6 +414,8 @@ describe("action", () => {
           health: 100,
           attack: 10,
           defense: 5,
+          currExp: 0,
+          maxExp: 50,
         },
         monsters: new Map([
           [
@@ -395,6 +426,7 @@ describe("action", () => {
               health: 100,
               attack: 10,
               defense: 5,
+              exp: 10,
             },
           ],
         ]),
@@ -425,6 +457,8 @@ describe("action", () => {
           health: 100,
           attack: 10,
           defense: 5,
+          currExp: 0,
+          maxExp: 50,
         },
         monsters: new Map(),
         healths: new Map(),

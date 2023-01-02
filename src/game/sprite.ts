@@ -8,6 +8,7 @@ export type Monster = {
   health: number;
   defense: number;
   attack: number;
+  exp: number;
 };
 export function generateMonsters(
   level: Level,
@@ -22,6 +23,7 @@ export function generateMonsters(
       health: Math.floor(10 * (1 + (level - 1) * 0.2)),
       defense: Math.floor(1 * (1 + (level - 1) * 0.5)),
       attack: Math.floor(3 * (1 + (level - 1) * 0.4)),
+      exp: Math.floor(10 * (1 + (level - 1) * 0.5)),
     };
 
     monsters.set(CoordinateKey.fromCoor(coordinate), monster);
@@ -36,6 +38,8 @@ export type Player = {
   health: number;
   defense: number;
   attack: number;
+  currExp: number;
+  maxExp: number;
 };
 export function generatePlayer(coordinate: Coordinate): Player {
   return {
@@ -44,6 +48,8 @@ export function generatePlayer(coordinate: Coordinate): Player {
     health: 10,
     defense: 2,
     attack: 3,
+    currExp: 0,
+    maxExp: 50,
   };
 }
 
@@ -95,7 +101,7 @@ export function generateExit(coordinate: Coordinate): Exit {
   };
 }
 
-export type Boss = Omit<Monster, "type"> & {
+export type Boss = Omit<Monster, "type" | "exp"> & {
   readonly type: "boss";
 };
 export function generateBoss(coordinate: Coordinate): Boss {
