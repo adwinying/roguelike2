@@ -391,15 +391,96 @@ describe("action", () => {
 
       const result = computeMove({ map, sprites }, "down");
 
+      const monster = [...sprites.monsters.values()][0];
       expect(result?.playerCoor).toEqual(sprites.player.coordinate);
-      expect(result?.monsterCoor).toEqual(
-        [...sprites.monsters.values()][0].coordinate
-      );
+      expect(result?.monsterCoor).toEqual(monster.coordinate);
 
       expect(result?.playerHealth).toEqual(sprites.player.health);
       expect(result?.playerDamage).toEqual(0);
       expect(result?.monsterHealth).toEqual(0);
       expect(result?.monsterDamage).toBeGreaterThan(0);
+    });
+
+    it("returns player exp when target cell is monster and defeated", () => {
+      const map = new Map();
+      map.set("1,1", MapTerrain.Floor);
+      map.set("1,2", MapTerrain.Floor);
+
+      const sprites = {
+        player: {
+          type: "player" as const,
+          coordinate: { x: 1, y: 1 },
+          health: 10,
+          attack: 1000,
+          defense: 10,
+          currExp: 0,
+          maxExp: 50,
+        },
+        monsters: new Map([
+          [
+            CoordinateKey.fromCoor({ x: 1, y: 2 }),
+            {
+              type: "monster" as const,
+              coordinate: { x: 1, y: 2 },
+              health: 1,
+              attack: 1000,
+              defense: 1,
+              exp: 10,
+            },
+          ],
+        ]),
+        healths: new Map(),
+      };
+
+      const result = computeMove({ map, sprites }, "down");
+
+      const { player } = sprites;
+      const monster = [...sprites.monsters.values()][0];
+
+      expect(result?.isLevelUp).toEqual(false);
+      expect(result?.newExp).toEqual(player.currExp + monster.exp);
+    });
+
+    it("sets level up flag to true and returns remaining exp when player exp exceeds max exp", () => {
+      const map = new Map();
+      map.set("1,1", MapTerrain.Floor);
+      map.set("1,2", MapTerrain.Floor);
+
+      const sprites = {
+        player: {
+          type: "player" as const,
+          coordinate: { x: 1, y: 1 },
+          health: 10,
+          attack: 1000,
+          defense: 10,
+          currExp: 45,
+          maxExp: 50,
+        },
+        monsters: new Map([
+          [
+            CoordinateKey.fromCoor({ x: 1, y: 2 }),
+            {
+              type: "monster" as const,
+              coordinate: { x: 1, y: 2 },
+              health: 1,
+              attack: 1000,
+              defense: 1,
+              exp: 10,
+            },
+          ],
+        ]),
+        healths: new Map(),
+      };
+
+      const result = computeMove({ map, sprites }, "down");
+
+      const { player } = sprites;
+      const monster = [...sprites.monsters.values()][0];
+
+      expect(result?.isLevelUp).toEqual(true);
+      expect(result?.newExp).toEqual(
+        player.currExp + monster.exp - player.maxExp
+      );
     });
 
     it("returns battle and player/monster stats when target cell is monster and not defeated", () => {

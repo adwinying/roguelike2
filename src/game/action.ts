@@ -107,7 +107,11 @@ export function computeMove(
         type: "victory" as const,
       };
 
-    if (monsterHealth === 0 && targetCell.type === "monster")
+    if (monsterHealth === 0 && targetCell.type === "monster") {
+      const totalExp = sprites.player.currExp + targetCell.exp;
+      const isLevelUp = totalExp >= sprites.player.maxExp;
+      const newExp = isLevelUp ? totalExp - sprites.player.maxExp : totalExp;
+
       return {
         type: "kill" as const,
         playerCoor: sprites.player.coordinate,
@@ -116,7 +120,11 @@ export function computeMove(
         monsterCoor: targetCoor,
         monsterHealth,
         monsterDamage,
+
+        isLevelUp,
+        newExp,
       };
+    }
 
     return {
       type: "battle" as const,
