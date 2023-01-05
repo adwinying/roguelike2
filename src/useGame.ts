@@ -4,33 +4,33 @@ import { useCallback, useMemo } from "react";
 
 import { computeMove } from "@/game/action";
 import { CoordinateKey } from "@/game/map";
-import { Level, toSpriteMap } from "@/game/sprite";
+import { Floor, toSpriteMap } from "@/game/sprite";
 import { initGameState } from "@/game/state";
 import useToast from "@/useToast";
 
 const gameAtom = atomWithImmer(initGameState(1));
 
 export default function useGame() {
-  const [{ level, map: gameMap, sprites }, updateGameState] = useAtom(gameAtom);
+  const [{ floor, map: gameMap, sprites }, updateGameState] = useAtom(gameAtom);
   const { sendHealthToast, sendWeaponToast, sendBattleToast, sendDefeatToast } =
     useToast();
 
   const spriteMap = useMemo(() => toSpriteMap(sprites), [sprites]);
 
   const resetGame = useCallback(
-    (overrideLevel?: Level) => {
+    (overrideLevel?: Floor) => {
       updateGameState((draft) => {
-        const newLevel = overrideLevel ?? ((level + 1) as Level);
+        const newFloor = overrideLevel ?? ((floor + 1) as Floor);
         const newGame = initGameState(
-          newLevel,
-          newLevel > 1 ? sprites.player : undefined
+          newFloor,
+          newFloor > 1 ? sprites.player : undefined
         );
-        draft.level = newLevel;
+        draft.floor = newFloor;
         draft.map = newGame.map;
         draft.sprites = newGame.sprites;
       });
     },
-    [level, sprites.player, updateGameState]
+    [floor, sprites.player, updateGameState]
   );
 
   const triggerMove = useCallback(
@@ -139,7 +139,7 @@ export default function useGame() {
   );
 
   return {
-    level,
+    floor,
     player: sprites.player,
     gameMap,
     spriteMap,

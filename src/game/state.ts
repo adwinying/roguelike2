@@ -6,7 +6,7 @@ import {
   generateMonsters,
   generatePlayer,
   generateWeapon,
-  Level,
+  Floor,
 } from "@/game/sprite";
 
 export const config = {
@@ -17,7 +17,7 @@ export const config = {
 };
 
 export type GameState = {
-  level: Level;
+  floor: Floor;
   map: ReturnType<typeof generateMap>;
   sprites: {
     player: ReturnType<typeof generatePlayer>;
@@ -29,11 +29,11 @@ export type GameState = {
   };
 };
 export function initGameState(
-  level: Level,
+  floor: Floor,
   playerState?: GameState["sprites"]["player"]
 ): GameState {
-  if (level > 1 && !playerState)
-    throw new Error("playerState is required for level > 1");
+  if (floor > 1 && !playerState)
+    throw new Error("playerState is required for floor > 1");
 
   const map = generateMap(config.mapWidth, config.mapHeight);
   // 3 for player, weapon, and exit/boss
@@ -44,21 +44,21 @@ export function initGameState(
     player: playerState
       ? { ...playerState, coordinate: spriteCoors[0] }
       : generatePlayer(spriteCoors[0]),
-    weapon: generateWeapon(level, spriteCoors[1]),
-    exit: level < 5 ? generateExit(spriteCoors[2]) : undefined,
-    boss: level === 5 ? generateBoss(spriteCoors[2]) : undefined,
+    weapon: generateWeapon(floor, spriteCoors[1]),
+    exit: floor < 5 ? generateExit(spriteCoors[2]) : undefined,
+    boss: floor === 5 ? generateBoss(spriteCoors[2]) : undefined,
     healths: generateHealths(
-      level,
+      floor,
       spriteCoors.slice(3, 3 + config.numOfHealths)
     ),
     monsters: generateMonsters(
-      level,
+      floor,
       spriteCoors.slice(3 + config.numOfHealths, numOfSprites)
     ),
   };
 
   return {
-    level,
+    floor,
     map,
     sprites,
   };

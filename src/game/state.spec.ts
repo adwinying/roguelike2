@@ -4,10 +4,10 @@ import { initGameState, config as gameConfig } from "@/game/state";
 describe("state", () => {
   describe("initGameState", () => {
     it("should generate a game state", () => {
-      const level = 1;
-      const state = initGameState(level);
+      const floor = 1;
+      const state = initGameState(floor);
 
-      expect(state.level).toEqual(level);
+      expect(state.floor).toEqual(floor);
 
       expect(state.map.size).toEqual(
         gameConfig.mapWidth * gameConfig.mapHeight
@@ -68,12 +68,12 @@ describe("state", () => {
       });
     });
 
-    it("should generate a game state with boss when level is 5", () => {
-      const level = 5;
+    it("should generate a game state with boss when floor is 5", () => {
+      const floor = 5;
       const playerState = generatePlayer({ x: 1, y: 1 });
-      const state = initGameState(level, playerState);
+      const state = initGameState(floor, playerState);
 
-      expect(state.level).toEqual(level);
+      expect(state.floor).toEqual(floor);
 
       expect(state.map.size).toEqual(
         gameConfig.mapWidth * gameConfig.mapHeight

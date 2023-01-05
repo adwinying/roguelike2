@@ -6,18 +6,18 @@ import {
   generateMonsters,
   generatePlayer,
   generateWeapon,
-  Level,
+  Floor,
 } from "@/game/sprite";
 
 describe("sprite", () => {
   describe("generateMonsters", () => {
     it("should generate monsters at the given coordinates", () => {
-      const level = 1;
+      const floor = 1;
       const coordinates = [
         { x: 1, y: 1 },
         { x: 2, y: 2 },
       ];
-      const monsters = generateMonsters(level, coordinates);
+      const monsters = generateMonsters(floor, coordinates);
 
       expect(monsters.size).toBe(coordinates.length);
       expect(monsters.get(CoordinateKey.fromCoor(coordinates[0]))).toEqual({
@@ -44,14 +44,14 @@ describe("sprite", () => {
       [3, 14, 2, 5, 20],
       [4, 16, 2, 6, 25],
       [5, 18, 3, 7, 30],
-    ] as [Level, number, number, number, number][])(
-      "should generate monsters at level %i with health %i, defense %i, attack %i and exp %i",
-      (level, health, defense, attack, exp) => {
+    ] as [Floor, number, number, number, number][])(
+      "should generate monsters at floor %i with health %i, defense %i, attack %i and exp %i",
+      (floor, health, defense, attack, exp) => {
         const coordinates = [
           { x: 1, y: 1 },
           { x: 2, y: 2 },
         ];
-        const monsters = generateMonsters(level, coordinates);
+        const monsters = generateMonsters(floor, coordinates);
 
         monsters.forEach((monster) => {
           expect(monster.health).toEqual(health);
@@ -82,13 +82,13 @@ describe("sprite", () => {
 
   describe("generateHealths", () => {
     it("should generate healths at the given coordinates", () => {
-      const level = 1;
+      const floor = 1;
       const coordinates = [
         { x: 1, y: 1 },
         { x: 2, y: 2 },
         { x: 3, y: 3 },
       ];
-      const healths = generateHealths(level, coordinates);
+      const healths = generateHealths(floor, coordinates);
 
       expect(healths.size).toBe(coordinates.length);
       expect(healths.get(CoordinateKey.fromCoor(coordinates[0]))).toEqual({
@@ -114,15 +114,15 @@ describe("sprite", () => {
       [3, 14],
       [4, 16],
       [5, 18],
-    ] as [Level, number][])(
-      "should generate health at level %i with health %i",
-      (level, health) => {
+    ] as [Floor, number][])(
+      "should generate health at floor %i with health %i",
+      (floor, health) => {
         const coordinates = [
           { x: 1, y: 1 },
           { x: 2, y: 2 },
           { x: 3, y: 3 },
         ];
-        const healthSprites = generateHealths(level, coordinates);
+        const healthSprites = generateHealths(floor, coordinates);
 
         healthSprites.forEach((sprite) => {
           expect(sprite.health).toEqual(health);
@@ -133,9 +133,9 @@ describe("sprite", () => {
 
   describe("generateWeapon", () => {
     it("should generate a weapon at the given coordinate", () => {
-      const level = 1;
+      const floor = 1;
       const coordinate = { x: 1, y: 1 };
-      const weapon = generateWeapon(level, coordinate);
+      const weapon = generateWeapon(floor, coordinate);
 
       expect(weapon).toEqual({ type: "weapon", coordinate, attack: 3 });
     });
@@ -146,11 +146,11 @@ describe("sprite", () => {
       [3, 3],
       [4, 3],
       [5, 4],
-    ] as [Level, number][])(
-      "should generate a weapon at level %i with attack %i",
-      (level, attack) => {
+    ] as [Floor, number][])(
+      "should generate a weapon at floor %i with attack %i",
+      (floor, attack) => {
         const coordinate = { x: 1, y: 1 };
-        const weapon = generateWeapon(level, coordinate);
+        const weapon = generateWeapon(floor, coordinate);
 
         expect(weapon.attack).toEqual(attack);
       }

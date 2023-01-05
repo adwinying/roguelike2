@@ -1,6 +1,6 @@
 import { Coordinate, CoordinateKey } from "@/game/map";
 
-export type Level = 1 | 2 | 3 | 4 | 5;
+export type Floor = 1 | 2 | 3 | 4 | 5;
 
 export type Monster = {
   readonly type: "monster";
@@ -11,7 +11,7 @@ export type Monster = {
   exp: number;
 };
 export function generateMonsters(
-  level: Level,
+  floor: Floor,
   coordinates: Coordinate[]
 ): Map<CoordinateKey, Monster> {
   const monsters = new Map<CoordinateKey, Monster>();
@@ -20,10 +20,10 @@ export function generateMonsters(
     const monster = {
       type: "monster" as const,
       coordinate,
-      health: Math.floor(10 * (1 + (level - 1) * 0.2)),
-      defense: Math.floor(1 * (1 + (level - 1) * 0.5)),
-      attack: Math.floor(3 * (1 + (level - 1) * 0.4)),
-      exp: Math.floor(10 * (1 + (level - 1) * 0.5)),
+      health: Math.floor(10 * (1 + (floor - 1) * 0.2)),
+      defense: Math.floor(1 * (1 + (floor - 1) * 0.5)),
+      attack: Math.floor(3 * (1 + (floor - 1) * 0.4)),
+      exp: Math.floor(10 * (1 + (floor - 1) * 0.5)),
     };
 
     monsters.set(CoordinateKey.fromCoor(coordinate), monster);
@@ -59,7 +59,7 @@ export type Health = {
   health: number;
 };
 export function generateHealths(
-  level: Level,
+  floor: Floor,
   coordinates: Coordinate[]
 ): Map<CoordinateKey, Health> {
   const healths = new Map<CoordinateKey, Health>();
@@ -68,7 +68,7 @@ export function generateHealths(
     const health = {
       type: "health" as const,
       coordinate,
-      health: Math.floor(10 * (1 + (level - 1) * 0.2)),
+      health: Math.floor(10 * (1 + (floor - 1) * 0.2)),
     };
 
     healths.set(CoordinateKey.fromCoor(coordinate), health);
@@ -82,11 +82,11 @@ export type Weapon = {
   coordinate: Coordinate;
   attack: number;
 };
-export function generateWeapon(level: Level, coordinate: Coordinate): Weapon {
+export function generateWeapon(floor: Floor, coordinate: Coordinate): Weapon {
   return {
     type: "weapon" as const,
     coordinate,
-    attack: Math.floor(3 * (1 + (level - 1) * 0.1)),
+    attack: Math.floor(3 * (1 + (floor - 1) * 0.1)),
   };
 }
 
