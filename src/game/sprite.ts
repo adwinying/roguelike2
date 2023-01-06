@@ -38,6 +38,7 @@ export type Player = {
   health: number;
   defense: number;
   attack: number;
+  level: number;
   currExp: number;
   maxExp: number;
 };
@@ -48,6 +49,7 @@ export function generatePlayer(coordinate: Coordinate): Player {
     health: 10,
     defense: 2,
     attack: 3,
+    level: 1,
     currExp: 0,
     maxExp: 50,
   };

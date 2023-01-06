@@ -74,6 +74,7 @@ describe("sprite", () => {
         health: 10,
         defense: 2,
         attack: 3,
+        level: 1,
         currExp: 0,
         maxExp: 50,
       });
