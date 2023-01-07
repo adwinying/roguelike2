@@ -32,6 +32,9 @@ export function generateMonsters(
   return monsters;
 }
 
+export const getPlayerMaxExp = (level: number) =>
+  Array.from({ length: level }).reduce((acc: number, _, i) => acc + i * 10, 50);
+
 export type Player = {
   readonly type: "player";
   coordinate: Coordinate;
@@ -51,7 +54,7 @@ export function generatePlayer(coordinate: Coordinate): Player {
     attack: 3,
     level: 1,
     currExp: 0,
-    maxExp: 50,
+    maxExp: getPlayerMaxExp(1),
   };
 }
 

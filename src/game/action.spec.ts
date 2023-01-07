@@ -451,7 +451,9 @@ describe("action", () => {
       const monster = [...sprites.monsters.values()][0];
 
       expect(result?.isLevelUp).toEqual(false);
+      expect(result?.newLevel).toBeUndefined();
       expect(result?.newExp).toEqual(player.currExp + monster.exp);
+      expect(result?.newMaxExp).toBeUndefined();
     });
 
     it("sets level up flag to true and returns remaining exp when player exp exceeds max exp", () => {
@@ -492,9 +494,11 @@ describe("action", () => {
       const monster = [...sprites.monsters.values()][0];
 
       expect(result?.isLevelUp).toEqual(true);
+      expect(result?.newLevel).toEqual(player.level + 1);
       expect(result?.newExp).toEqual(
         player.currExp + monster.exp - player.maxExp
       );
+      expect(result?.newMaxExp).toEqual(60);
     });
 
     it("returns battle and player/monster stats when target cell is monster and not defeated", () => {

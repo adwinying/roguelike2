@@ -7,6 +7,7 @@ import {
   generatePlayer,
   generateWeapon,
   Floor,
+  getPlayerMaxExp,
 } from "@/game/sprite";
 
 describe("sprite", () => {
@@ -61,6 +62,20 @@ describe("sprite", () => {
         });
       }
     );
+  });
+
+  describe("getPlayerMaxExp", () => {
+    it.each([
+      [1, 50],
+      [2, 60],
+      [3, 80],
+      [4, 110],
+      [5, 150],
+    ])("at level %i, return max exp of %i", (level, maxExp) => {
+      const result = getPlayerMaxExp(level);
+
+      expect(result).toEqual(maxExp);
+    });
   });
 
   describe("generatePlayer", () => {
