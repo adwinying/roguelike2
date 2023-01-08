@@ -34,6 +34,8 @@ export function generateMonsters(
 
 export const getPlayerMaxExp = (level: number) =>
   Array.from({ length: level }).reduce((acc: number, _, i) => acc + i * 10, 50);
+export const getPlayerAttackIncrease = (level: number) =>
+  Math.floor(3 * (1 + (level - 1) * 0.1));
 
 export type Player = {
   readonly type: "player";

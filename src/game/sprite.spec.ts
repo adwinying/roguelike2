@@ -8,6 +8,7 @@ import {
   generateWeapon,
   Floor,
   getPlayerMaxExp,
+  getPlayerAttackIncrease,
 } from "@/game/sprite";
 
 describe("sprite", () => {
@@ -75,6 +76,20 @@ describe("sprite", () => {
       const result = getPlayerMaxExp(level);
 
       expect(result).toEqual(maxExp);
+    });
+  });
+
+  describe("getPlayerAttackIncrease", () => {
+    it.each([
+      [1, 3],
+      [2, 3],
+      [3, 3],
+      [4, 3],
+      [5, 4],
+    ])("at level %i, return attack increase of %i", (level, attack) => {
+      const result = getPlayerAttackIncrease(level);
+
+      expect(result).toEqual(attack);
     });
   });
 

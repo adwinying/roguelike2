@@ -1,6 +1,7 @@
 import { Coordinate, CoordinateKey, MapTerrain } from "@/game/map";
 import {
   Boss,
+  getPlayerAttackIncrease,
   getPlayerMaxExp,
   Monster,
   Player,
@@ -116,9 +117,14 @@ export function computeMove(
     if (monsterHealth === 0 && targetCell.type === "monster") {
       const totalExp = sprites.player.currExp + targetCell.exp;
       const isLevelUp = totalExp >= sprites.player.maxExp;
+
       const newLevel = isLevelUp ? sprites.player.level + 1 : undefined;
       const newExp = isLevelUp ? totalExp - sprites.player.maxExp : totalExp;
+
       const newMaxExp = newLevel ? getPlayerMaxExp(newLevel) : undefined;
+      const newAttack = newLevel
+        ? sprites.player.attack + getPlayerAttackIncrease(newLevel)
+        : undefined;
 
       return {
         type: "kill" as const,
@@ -133,6 +139,7 @@ export function computeMove(
         newLevel,
         newExp,
         newMaxExp,
+        newAttack,
       };
     }
 

@@ -454,6 +454,7 @@ describe("action", () => {
       expect(result?.newLevel).toBeUndefined();
       expect(result?.newExp).toEqual(player.currExp + monster.exp);
       expect(result?.newMaxExp).toBeUndefined();
+      expect(result?.newAttack).toBeUndefined();
     });
 
     it("sets level up flag to true and returns remaining exp when player exp exceeds max exp", () => {
@@ -499,6 +500,7 @@ describe("action", () => {
         player.currExp + monster.exp - player.maxExp
       );
       expect(result?.newMaxExp).toEqual(60);
+      expect(result?.newAttack).toEqual(player.attack + 3);
     });
 
     it("returns battle and player/monster stats when target cell is monster and not defeated", () => {
