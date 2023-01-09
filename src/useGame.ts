@@ -12,8 +12,12 @@ const gameAtom = atomWithImmer(initGameState(1));
 
 export default function useGame() {
   const [{ floor, map: gameMap, sprites }, updateGameState] = useAtom(gameAtom);
-  const { sendHealthToast, sendWeaponToast, sendBattleToast, sendDefeatToast } =
-    useToast();
+  const {
+    sendHealthToast,
+    sendWeaponToast,
+    sendBattleToast,
+    sendMonsterDefeatToast,
+  } = useToast();
 
   const spriteMap = useMemo(() => toSpriteMap(sprites), [sprites]);
 
@@ -60,7 +64,7 @@ export default function useGame() {
             CoordinateKey.fromCoor(result.monsterCoor)
           );
         });
-        sendDefeatToast(result.monsterCoor);
+        sendMonsterDefeatToast(result.monsterCoor);
 
         return;
       }
@@ -134,7 +138,7 @@ export default function useGame() {
       sendWeaponToast,
       sendHealthToast,
       sendBattleToast,
-      sendDefeatToast,
+      sendMonsterDefeatToast,
     ]
   );
 

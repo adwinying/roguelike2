@@ -65,7 +65,7 @@ export default function useToast() {
     );
   };
 
-  const sendDefeatToast = (monsterCoor: Coordinate) => {
+  const sendMonsterDefeatToast = (monsterCoor: Coordinate) => {
     sendToast(
       {
         type: "success",
@@ -81,6 +81,6 @@ export default function useToast() {
     sendHealthToast,
     sendWeaponToast,
     sendBattleToast,
-    sendDefeatToast,
+    sendMonsterDefeatToast,
   };
 }
