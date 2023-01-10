@@ -77,10 +77,20 @@ export default function useToast() {
     );
   };
 
+  const sendLevelUpToast = (newLevel: number, attackIncreasedBy: number) => {
+    sendToast({
+      type: "success",
+      icon: "🎉",
+      title: "Level Up!",
+      content: `Level increased to ${newLevel}\nAttack increased by ${attackIncreasedBy}`,
+    });
+  };
+
   return {
     sendHealthToast,
     sendWeaponToast,
     sendBattleToast,
     sendMonsterDefeatToast,
+    sendLevelUpToast,
   };
 }
