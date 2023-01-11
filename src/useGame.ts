@@ -17,6 +17,7 @@ export default function useGame() {
     sendWeaponToast,
     sendBattleToast,
     sendMonsterDefeatToast,
+    sendLevelUpToast,
   } = useToast();
 
   const spriteMap = useMemo(() => toSpriteMap(sprites), [sprites]);
@@ -60,11 +61,23 @@ export default function useGame() {
 
       if (result.type === "kill") {
         updateGameState((draft) => {
+          draft.sprites.player.currExp = result.newExp;
           draft.sprites.monsters.delete(
             CoordinateKey.fromCoor(result.monsterCoor)
           );
+
+          if (result.newLevel) draft.sprites.player.level = result.newLevel;
+          if (result.newMaxExp) draft.sprites.player.maxExp = result.newMaxExp;
+          if (result.newAttack) draft.sprites.player.attack = result.newAttack;
         });
+
         sendMonsterDefeatToast(result.monsterCoor);
+
+        if (result.isLevelUp && result.newLevel && result.newAttack)
+          sendLevelUpToast(
+            result.newLevel,
+            result.newAttack - sprites.player.attack
+          );
 
         return;
       }
@@ -139,6 +152,7 @@ export default function useGame() {
       sendHealthToast,
       sendBattleToast,
       sendMonsterDefeatToast,
+      sendLevelUpToast,
     ]
   );
 
