@@ -25,8 +25,14 @@ export default function Stats({ className = "" }: { className?: string }) {
 
       <div className="stat px-3 py-2 md:px-6 md:py-4">
         <div className="stat-title">EXP</div>
-        <div className="stat-value">31</div>
-        <div className="stat-desc">to next lvl</div>
+        <div className="stat-value">{player.currExp.toLocaleString()}</div>
+        <div className="stat-desc">/ {player.maxExp.toLocaleString()}</div>
+      </div>
+
+      <div className="stat px-3 py-2 md:px-6 md:py-4">
+        <div className="stat-title">LVL</div>
+        <div className="stat-value">{player.level}</div>
+        <div className="stat-desc">&nbsp;</div>
       </div>
 
       <div className="stat px-3 py-2 md:px-6 md:py-4">
