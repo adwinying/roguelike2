@@ -1,5 +1,7 @@
+import { CoordinateKey, MapTerrain } from "./map";
+
 import { generatePlayer } from "@/game/sprite";
-import { initGameState, config as gameConfig } from "@/game/state";
+import { initGameState, config as gameConfig, printMap } from "@/game/state";
 
 describe("state", () => {
   describe("initGameState", () => {
@@ -135,6 +137,235 @@ describe("state", () => {
           },
         });
       });
+    });
+  });
+
+  const map = new Map();
+  map.set(CoordinateKey.fromCoor({ x: 0, y: 0 }), MapTerrain.Floor);
+  map.set(CoordinateKey.fromCoor({ x: 0, y: 1 }), MapTerrain.Floor);
+  map.set(CoordinateKey.fromCoor({ x: 0, y: 2 }), MapTerrain.Floor);
+  map.set(CoordinateKey.fromCoor({ x: 1, y: 0 }), MapTerrain.Floor);
+  map.set(CoordinateKey.fromCoor({ x: 1, y: 1 }), MapTerrain.Floor);
+  map.set(CoordinateKey.fromCoor({ x: 1, y: 2 }), MapTerrain.Floor);
+  map.set(CoordinateKey.fromCoor({ x: 2, y: 0 }), MapTerrain.Floor);
+  map.set(CoordinateKey.fromCoor({ x: 2, y: 1 }), MapTerrain.Floor);
+  map.set(CoordinateKey.fromCoor({ x: 2, y: 2 }), MapTerrain.Floor);
+
+  describe("printMap", () => {
+    it("should print a map based on current state with specified size", () => {
+      const width = 3;
+      const height = 3;
+      const sprites = {
+        player: {
+          type: "player" as const,
+          coordinate: { x: 1, y: 1 },
+          attack: 1,
+          defense: 1,
+          health: 1,
+          level: 1,
+          currExp: 1,
+          maxExp: 1,
+        },
+        healths: new Map(),
+        monsters: new Map(),
+      };
+
+      const state = { floor: 1 as const, map, sprites };
+
+      const printedMap = printMap(state, width, height);
+
+      expect(printedMap.length).toEqual(height);
+      printedMap.forEach((row) => {
+        expect(row.length).toEqual(width);
+      });
+    });
+
+    it("should print a map with the sprites in the map", () => {
+      const width = 3;
+      const height = 3;
+      const sprites = {
+        player: {
+          type: "player" as const,
+          coordinate: { x: 1, y: 1 },
+          attack: 1,
+          defense: 1,
+          health: 1,
+          level: 1,
+          currExp: 1,
+          maxExp: 1,
+        },
+        healths: new Map([
+          [
+            CoordinateKey.fromCoor({ x: 0, y: 0 }),
+            {
+              type: "health" as const,
+              coordinate: { x: 0, y: 0 },
+              health: 1,
+            },
+          ],
+        ]),
+        monsters: new Map([
+          [
+            CoordinateKey.fromCoor({ x: 2, y: 2 }),
+            {
+              type: "monster" as const,
+              coordinate: { x: 2, y: 2 },
+              attack: 1,
+              defense: 1,
+              health: 1,
+              exp: 1,
+            },
+          ],
+        ]),
+      };
+
+      const state = { floor: 1 as const, map, sprites };
+
+      const printedMap = printMap(state, width, height);
+
+      expect(printedMap[0][0]).toEqual("health");
+      expect(printedMap[1][1]).toEqual("player");
+      expect(printedMap[2][2]).toEqual("monster");
+    });
+
+    it("should print a part of the map if size specified is smaller than the map", () => {
+      const width = 1;
+      const height = 1;
+      const sprites = {
+        player: {
+          type: "player" as const,
+          coordinate: { x: 1, y: 1 },
+          attack: 1,
+          defense: 1,
+          health: 1,
+          level: 1,
+          currExp: 1,
+          maxExp: 1,
+        },
+        healths: new Map(),
+        monsters: new Map(),
+      };
+
+      const state = { floor: 1 as const, map, sprites };
+
+      const printedMap = printMap(state, width, height);
+
+      expect(printedMap.length).toEqual(height);
+      printedMap.forEach((row) => {
+        expect(row.length).toEqual(width);
+      });
+
+      expect(printedMap[0][0]).toEqual("player");
+    });
+
+    it("should throw error if width specified is larger than map width", () => {
+      const width = 101;
+      const height = 3;
+      const sprites = {
+        player: {
+          type: "player" as const,
+          coordinate: { x: 1, y: 1 },
+          attack: 1,
+          defense: 1,
+          health: 1,
+          level: 1,
+          currExp: 1,
+          maxExp: 1,
+        },
+        healths: new Map(),
+        monsters: new Map(),
+      };
+
+      const state = { floor: 1 as const, map, sprites };
+
+      expect(() => printMap(state, width, height)).toThrowError(
+        "width and height should be less than map size"
+      );
+    });
+
+    it("should throw error if height specified is larger than map height", () => {
+      const width = 3;
+      const height = 101;
+      const sprites = {
+        player: {
+          type: "player" as const,
+          coordinate: { x: 1, y: 1 },
+          attack: 1,
+          defense: 1,
+          health: 1,
+          level: 1,
+          currExp: 1,
+          maxExp: 1,
+        },
+        healths: new Map(),
+        monsters: new Map(),
+      };
+
+      const state = { floor: 1 as const, map, sprites };
+
+      expect(() => printMap(state, width, height)).toThrowError(
+        "width and height should be less than map size"
+      );
+    });
+
+    it("should print player off center if player is at top left edge of map", () => {
+      const width = 3;
+      const height = 3;
+      const sprites = {
+        player: {
+          type: "player" as const,
+          coordinate: { x: 0, y: 0 },
+          attack: 1,
+          defense: 1,
+          health: 1,
+          level: 1,
+          currExp: 1,
+          maxExp: 1,
+        },
+        healths: new Map(),
+        monsters: new Map(),
+      };
+
+      const state = { floor: 1 as const, map, sprites };
+
+      const printedMap = printMap(state, width, height);
+
+      expect(printedMap.length).toEqual(height);
+      printedMap.forEach((row) => {
+        expect(row.length).toEqual(width);
+      });
+
+      expect(printedMap[0][0]).toEqual("player");
+    });
+
+    it("should print player off center if player is at bottom right edge of map", () => {
+      const width = 3;
+      const height = 3;
+      const sprites = {
+        player: {
+          type: "player" as const,
+          coordinate: { x: 2, y: 2 },
+          attack: 1,
+          defense: 1,
+          health: 1,
+          level: 1,
+          currExp: 1,
+          maxExp: 1,
+        },
+        healths: new Map(),
+        monsters: new Map(),
+      };
+
+      const state = { floor: 1 as const, map, sprites };
+
+      const printedMap = printMap(state, width, height);
+
+      expect(printedMap.length).toEqual(height);
+      printedMap.forEach((row) => {
+        expect(row.length).toEqual(width);
+      });
+
+      expect(printedMap[2][2]).toEqual("player");
     });
   });
 });

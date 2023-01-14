@@ -1,4 +1,9 @@
-import { generateMap, getRandomFloorCells } from "@/game/map";
+import {
+  CoordinateKey,
+  generateMap,
+  getRandomFloorCells,
+  MapTerrain,
+} from "@/game/map";
 import {
   generateBoss,
   generateExit,
@@ -6,7 +11,9 @@ import {
   generateMonsters,
   generatePlayer,
   generateWeapon,
+  toSpriteMap,
   Floor,
+  Sprite,
 } from "@/game/sprite";
 
 export const config = {
@@ -62,4 +69,52 @@ export function initGameState(
     map,
     sprites,
   };
+}
+
+export function printMap(state: GameState, width: number, height: number) {
+  const [mapWidth, mapHeight] = (() => {
+    let currWidth = 0;
+    let currHeight = 0;
+
+    state.map.forEach((_, key) => {
+      const { x, y } = CoordinateKey.toCoor(key);
+      currWidth = Math.max(currWidth, x);
+      currHeight = Math.max(currHeight, y);
+    });
+
+    return [currWidth + 1, currHeight + 1];
+  })();
+
+  if (width > mapWidth || height > mapHeight)
+    throw new Error("width and height should be less than map size");
+
+  const map: (MapTerrain | Sprite["type"])[][] = [];
+  const playerCoor = state.sprites.player.coordinate;
+  const spriteCoors = toSpriteMap(state.sprites);
+
+  const startX =
+    playerCoor.x + Math.floor(width / 2) < mapWidth
+      ? Math.max(0, playerCoor.x - Math.floor(width / 2))
+      : mapWidth - width;
+  const startY =
+    playerCoor.y + Math.floor(height / 2) < mapHeight
+      ? Math.max(0, playerCoor.y - Math.floor(height / 2))
+      : mapHeight - height;
+
+  for (let x = startX; x < startX + width; x += 1) {
+    for (let y = startY; y < startY + height; y += 1) {
+      const coorKey = CoordinateKey.fromCoor({ x, y });
+      const cellType = spriteCoors.get(coorKey)?.type ?? state.map.get(coorKey);
+
+      if (cellType === undefined) throw new Error("Invalid map cell");
+
+      const printCoorX = x - startX;
+      const printCoorY = y - startY;
+
+      if (map[printCoorY] === undefined) map[printCoorY] = [];
+      map[printCoorY][printCoorX] = cellType;
+    }
+  }
+
+  return map;
 }
