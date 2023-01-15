@@ -38,12 +38,12 @@ export default function App() {
   }, [triggerMove]);
 
   return (
-    <div className="min-h-screen px-3 text-center">
-      <h1 className="pt-8 pb-4 text-4xl font-bold">Roguelike</h1>
+    <div className="container mx-auto flex h-screen flex-col items-center justify-center px-3 py-4 text-center">
+      <h1 className="pb-4 text-4xl font-bold">Roguelike</h1>
 
       <Stats className="mb-4" />
 
-      <Map className="mx-auto" />
+      <Map className="flex-1" />
 
       <Toaster position="bottom-left" />
     </div>

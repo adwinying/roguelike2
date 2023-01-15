@@ -1,6 +1,8 @@
-import { Coordinate, CoordinateKey, MapTerrain } from "@/game/map";
+import { useEffect, useMemo, useRef, useState } from "react";
+
+import { MapTerrain } from "@/game/map";
 import { Sprite } from "@/game/sprite";
-import { config as gameConfig } from "@/game/state";
+import { config as gameConfig, printMap } from "@/game/state";
 import useGame from "@/useGame";
 
 function MapCell({ cellType }: { cellType: MapTerrain | Sprite["type"] }) {
@@ -15,33 +17,60 @@ function MapCell({ cellType }: { cellType: MapTerrain | Sprite["type"] }) {
     boss: "bg-red-900",
   };
 
-  return <td className={`h-2 w-2 ${cellColor[cellType]}`} />;
+  return <td className={`h-4 w-4 ${cellColor[cellType]}`} />;
 }
 
 export default function Map({ className = "" }: { className?: string }) {
-  const { gameMap, spriteMap } = useGame();
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [mapRect, setMapRect] = useState({ width: 0, height: 0 });
+  const { gameMap, sprites, floor } = useGame();
+  const mapCellsToDisplay = useMemo(
+    () => ({
+      x: Math.min(gameConfig.mapWidth, Math.floor(mapRect.width / 16)),
+      y: Math.min(gameConfig.mapHeight, Math.floor(mapRect.height / 16)),
+    }),
+    [mapRect]
+  );
 
-  const getCellType = (coor: Coordinate) => {
-    const coorKey = CoordinateKey.fromCoor(coor);
+  useEffect(() => {
+    const updateMapRect = () => {
+      if (!wrapperRef.current) return;
 
-    const cellType = spriteMap.get(coorKey)?.type ?? gameMap.get(coorKey);
+      const { width, height } = wrapperRef.current.getBoundingClientRect();
 
-    if (cellType === undefined) throw new Error("Invalid map cell");
+      setMapRect({ width, height });
+    };
 
-    return cellType;
-  };
+    updateMapRect();
+    window.addEventListener("resize", updateMapRect);
 
+    return () => window.removeEventListener("resize", updateMapRect);
+  }, [wrapperRef]);
+
+  const partialMap = useMemo(
+    () =>
+      printMap(
+        { floor, map: gameMap, sprites },
+        mapCellsToDisplay.x,
+        mapCellsToDisplay.y
+      ),
+    [floor, gameMap, sprites, mapCellsToDisplay]
+  );
+
+  /* eslint-disable react/no-array-index-key */
   return (
-    <table className={className}>
-      <tbody>
-        {Array.from(Array(gameConfig.mapHeight).keys()).map((y) => (
-          <tr key={y}>
-            {Array.from(Array(gameConfig.mapWidth).keys()).map((x) => (
-              <MapCell key={x} cellType={getCellType({ x, y })} />
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div className={`flex w-full justify-center ${className}`} ref={wrapperRef}>
+      <table>
+        <tbody>
+          {partialMap.map((row, i) => (
+            <tr key={i}>
+              {row.map((cell, j) => (
+                <MapCell key={j} cellType={cell} />
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

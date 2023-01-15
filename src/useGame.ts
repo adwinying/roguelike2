@@ -1,10 +1,10 @@
 import { useAtom } from "jotai";
 import { atomWithImmer } from "jotai/immer";
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 
 import { computeMove } from "@/game/action";
 import { CoordinateKey } from "@/game/map";
-import { Floor, toSpriteMap } from "@/game/sprite";
+import { Floor } from "@/game/sprite";
 import { initGameState } from "@/game/state";
 import useToast from "@/useToast";
 
@@ -19,8 +19,6 @@ export default function useGame() {
     sendMonsterDefeatToast,
     sendLevelUpToast,
   } = useToast();
-
-  const spriteMap = useMemo(() => toSpriteMap(sprites), [sprites]);
 
   const resetGame = useCallback(
     (overrideLevel?: Floor) => {
@@ -159,8 +157,8 @@ export default function useGame() {
   return {
     floor,
     player: sprites.player,
+    sprites,
     gameMap,
-    spriteMap,
     triggerMove,
   };
 }
