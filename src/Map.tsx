@@ -33,19 +33,18 @@ export default function Map({ className = "" }: { className?: string }) {
   );
 
   useEffect(() => {
-    const updateMapRect = () => {
-      if (!wrapperRef.current) return;
+    const resizeObserver = new ResizeObserver((entries) => {
+      entries.forEach((entry) => {
+        const { width, height } = entry.contentRect;
 
-      const { width, height } = wrapperRef.current.getBoundingClientRect();
+        setMapRect({ width, height });
+      });
+    });
 
-      setMapRect({ width, height });
-    };
+    if (wrapperRef.current) resizeObserver.observe(wrapperRef.current);
 
-    updateMapRect();
-    window.addEventListener("resize", updateMapRect);
-
-    return () => window.removeEventListener("resize", updateMapRect);
-  }, [wrapperRef]);
+    return () => resizeObserver.disconnect();
+  }, []);
 
   const partialMap = useMemo(
     () =>
