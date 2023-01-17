@@ -24,6 +24,7 @@ export const config = {
 };
 
 export type GameState = {
+  isFlashlightOn: boolean;
   floor: Floor;
   map: ReturnType<typeof generateMap>;
   sprites: {
@@ -65,6 +66,7 @@ export function initGameState(
   };
 
   return {
+    isFlashlightOn: true,
     floor,
     map,
     sprites,

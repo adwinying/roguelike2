@@ -23,7 +23,7 @@ function MapCell({ cellType }: { cellType: MapTerrain | Sprite["type"] }) {
 export default function Map({ className = "" }: { className?: string }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [mapRect, setMapRect] = useState({ width: 0, height: 0 });
-  const { gameMap, sprites, floor } = useGame();
+  const { gameMap, sprites, floor, isFlashlightOn } = useGame();
   const mapCellsToDisplay = useMemo(
     () => ({
       x: Math.min(gameConfig.mapWidth, Math.floor(mapRect.width / 16)),
@@ -49,11 +49,11 @@ export default function Map({ className = "" }: { className?: string }) {
   const partialMap = useMemo(
     () =>
       printMap(
-        { floor, map: gameMap, sprites },
+        { isFlashlightOn, floor, map: gameMap, sprites },
         mapCellsToDisplay.x,
         mapCellsToDisplay.y
       ),
-    [floor, gameMap, sprites, mapCellsToDisplay]
+    [isFlashlightOn, floor, gameMap, sprites, mapCellsToDisplay]
   );
 
   /* eslint-disable react/no-array-index-key */

@@ -170,7 +170,7 @@ describe("state", () => {
         monsters: new Map(),
       };
 
-      const state = { floor: 1 as const, map, sprites };
+      const state = { isFlashlightOn: true, floor: 1 as const, map, sprites };
 
       const printedMap = printMap(state, width, height);
 
@@ -219,7 +219,7 @@ describe("state", () => {
         ]),
       };
 
-      const state = { floor: 1 as const, map, sprites };
+      const state = { isFlashlightOn: true, floor: 1 as const, map, sprites };
 
       const printedMap = printMap(state, width, height);
 
@@ -246,7 +246,7 @@ describe("state", () => {
         monsters: new Map(),
       };
 
-      const state = { floor: 1 as const, map, sprites };
+      const state = { isFlashlightOn: true, floor: 1 as const, map, sprites };
 
       const printedMap = printMap(state, width, height);
 
@@ -276,7 +276,7 @@ describe("state", () => {
         monsters: new Map(),
       };
 
-      const state = { floor: 1 as const, map, sprites };
+      const state = { isFlashlightOn: true, floor: 1 as const, map, sprites };
 
       expect(() => printMap(state, width, height)).toThrowError(
         "width and height should be less than map size"
@@ -301,7 +301,7 @@ describe("state", () => {
         monsters: new Map(),
       };
 
-      const state = { floor: 1 as const, map, sprites };
+      const state = { isFlashlightOn: true, floor: 1 as const, map, sprites };
 
       expect(() => printMap(state, width, height)).toThrowError(
         "width and height should be less than map size"
@@ -326,7 +326,7 @@ describe("state", () => {
         monsters: new Map(),
       };
 
-      const state = { floor: 1 as const, map, sprites };
+      const state = { isFlashlightOn: true, floor: 1 as const, map, sprites };
 
       const printedMap = printMap(state, width, height);
 
@@ -356,7 +356,7 @@ describe("state", () => {
         monsters: new Map(),
       };
 
-      const state = { floor: 1 as const, map, sprites };
+      const state = { isFlashlightOn: true, floor: 1 as const, map, sprites };
 
       const printedMap = printMap(state, width, height);
 

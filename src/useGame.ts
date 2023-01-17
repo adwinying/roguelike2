@@ -11,7 +11,8 @@ import useToast from "@/useToast";
 const gameAtom = atomWithImmer(initGameState(1));
 
 export default function useGame() {
-  const [{ floor, map: gameMap, sprites }, updateGameState] = useAtom(gameAtom);
+  const [{ isFlashlightOn, floor, map: gameMap, sprites }, updateGameState] =
+    useAtom(gameAtom);
   const {
     sendHealthToast,
     sendWeaponToast,
@@ -155,6 +156,7 @@ export default function useGame() {
   );
 
   return {
+    isFlashlightOn,
     floor,
     player: sprites.player,
     sprites,
