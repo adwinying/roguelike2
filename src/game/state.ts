@@ -1,5 +1,7 @@
 import {
+  Coordinate,
   CoordinateKey,
+  GameMap,
   generateMap,
   getRandomFloorCells,
   MapTerrain,
@@ -21,6 +23,7 @@ export const config = {
   mapHeight: 100,
   numOfMonsters: 9,
   numOfHealths: 6,
+  visibleRadius: 7,
 };
 
 export type GameState = {
@@ -71,6 +74,60 @@ export function initGameState(
     map,
     sprites,
   };
+}
+
+export function getSurroundingCellCoors(map: GameMap, center: Coordinate) {
+  const { x, y } = center;
+
+  // corner cells will be ignored to get "rounded" corners
+  const cornerCells = new Set(
+    [
+      // top left
+      { x: x - 6, y: y - 6 },
+      { x: x - 5, y: y - 6 },
+      { x: x - 4, y: y - 6 },
+      { x: x - 6, y: y - 5 },
+      { x: x - 5, y: y - 5 },
+      { x: x - 6, y: y - 4 },
+
+      // top right
+      { x: x + 6, y: y - 6 },
+      { x: x + 5, y: y - 6 },
+      { x: x + 4, y: y - 6 },
+      { x: x + 6, y: y - 5 },
+      { x: x + 5, y: y - 5 },
+      { x: x + 6, y: y - 4 },
+
+      // bottom left
+      { x: x - 6, y: y + 6 },
+      { x: x - 5, y: y + 6 },
+      { x: x - 4, y: y + 6 },
+      { x: x - 6, y: y + 5 },
+      { x: x - 5, y: y + 5 },
+      { x: x - 6, y: y + 4 },
+
+      // bottom right
+      { x: x + 6, y: y + 6 },
+      { x: x + 5, y: y + 6 },
+      { x: x + 4, y: y + 6 },
+      { x: x + 6, y: y + 5 },
+      { x: x + 5, y: y + 5 },
+      { x: x + 6, y: y + 4 },
+    ].map((coor) => CoordinateKey.fromCoor(coor))
+  );
+
+  const maxRange = config.visibleRadius - 1; // -1 for the center cell
+  const surroundingCoors = new Set<CoordinateKey>();
+  for (let i = -maxRange; i <= maxRange; i += 1) {
+    for (let j = -maxRange; j <= maxRange; j += 1) {
+      const coorKey = CoordinateKey.fromCoor({ x: x + i, y: y + j });
+
+      if (!cornerCells.has(coorKey) && map.has(coorKey))
+        surroundingCoors.add(coorKey);
+    }
+  }
+
+  return surroundingCoors;
 }
 
 export function printMap(state: GameState, width: number, height: number) {

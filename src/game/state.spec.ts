@@ -1,7 +1,12 @@
 import { CoordinateKey, MapTerrain } from "./map";
 
 import { generatePlayer } from "@/game/sprite";
-import { initGameState, config as gameConfig, printMap } from "@/game/state";
+import {
+  initGameState,
+  config as gameConfig,
+  printMap,
+  getSurroundingCellCoors,
+} from "@/game/state";
 
 describe("state", () => {
   describe("initGameState", () => {
@@ -140,7 +145,120 @@ describe("state", () => {
     });
   });
 
-  const map = new Map();
+  describe("getSurroundingCellCoors", () => {
+    it("should return surrounding cell coordinates", () => {
+      const map = new Map<CoordinateKey, MapTerrain>();
+      for (let x = 0; x < 13; x += 1) {
+        for (let y = 0; y < 13; y += 1) {
+          map.set(CoordinateKey.fromCoor({ x, y }), MapTerrain.Floor);
+        }
+      }
+
+      const center = { x: 6, y: 6 };
+      const result = getSurroundingCellCoors(map, center);
+
+      const expected = new Set<CoordinateKey>();
+
+      // normal rows
+      for (let x = 0; x < 13; x += 1) {
+        for (let y = 3; y < 10; y += 1) {
+          expected.add(CoordinateKey.fromCoor({ x, y }));
+        }
+      }
+
+      // topmost/bottommost rows
+      for (let x = 3; x < 10; x += 1) {
+        expected.add(CoordinateKey.fromCoor({ x, y: 0 }));
+        expected.add(CoordinateKey.fromCoor({ x, y: 12 }));
+      }
+
+      // 2nd topmost/2nd bottommost rows
+      for (let x = 2; x < 11; x += 1) {
+        expected.add(CoordinateKey.fromCoor({ x, y: 1 }));
+        expected.add(CoordinateKey.fromCoor({ x, y: 11 }));
+      }
+
+      // 3rd topmost/3rd bottommost rows
+      for (let x = 1; x < 12; x += 1) {
+        expected.add(CoordinateKey.fromCoor({ x, y: 2 }));
+        expected.add(CoordinateKey.fromCoor({ x, y: 10 }));
+      }
+
+      expect(result.size).toEqual(expected.size);
+      expect(result).toEqual(expected);
+    });
+
+    it("should only return coordinates that are within the map", () => {
+      const map = new Map<CoordinateKey, MapTerrain>();
+      for (let x = 0; x < 13; x += 1) {
+        for (let y = 0; y < 13; y += 1) {
+          map.set(CoordinateKey.fromCoor({ x, y }), MapTerrain.Floor);
+        }
+      }
+
+      const center = { x: 0, y: 0 };
+      const result = getSurroundingCellCoors(map, center);
+
+      const expected = new Set<CoordinateKey>(
+        [
+          { x: 0, y: 0 },
+          { x: 1, y: 0 },
+          { x: 2, y: 0 },
+          { x: 3, y: 0 },
+          { x: 4, y: 0 },
+          { x: 5, y: 0 },
+          { x: 6, y: 0 },
+
+          { x: 0, y: 1 },
+          { x: 1, y: 1 },
+          { x: 2, y: 1 },
+          { x: 3, y: 1 },
+          { x: 4, y: 1 },
+          { x: 5, y: 1 },
+          { x: 6, y: 1 },
+
+          { x: 0, y: 2 },
+          { x: 1, y: 2 },
+          { x: 2, y: 2 },
+          { x: 3, y: 2 },
+          { x: 4, y: 2 },
+          { x: 5, y: 2 },
+          { x: 6, y: 2 },
+
+          { x: 0, y: 3 },
+          { x: 1, y: 3 },
+          { x: 2, y: 3 },
+          { x: 3, y: 3 },
+          { x: 4, y: 3 },
+          { x: 5, y: 3 },
+          { x: 6, y: 3 },
+
+          { x: 0, y: 4 },
+          { x: 1, y: 4 },
+          { x: 2, y: 4 },
+          { x: 3, y: 4 },
+          { x: 4, y: 4 },
+          { x: 5, y: 4 },
+
+          { x: 0, y: 5 },
+          { x: 1, y: 5 },
+          { x: 2, y: 5 },
+          { x: 3, y: 5 },
+          { x: 4, y: 5 },
+
+          { x: 0, y: 6 },
+          { x: 1, y: 6 },
+          { x: 2, y: 6 },
+          { x: 3, y: 6 },
+        ].map((coor) => CoordinateKey.fromCoor(coor))
+      );
+
+      expect(result.size).toEqual(expected.size);
+      expect(result).toEqual(expected);
+    });
+  });
+
+  const map = new Map<CoordinateKey, MapTerrain>();
   map.set(CoordinateKey.fromCoor({ x: 0, y: 0 }), MapTerrain.Floor);
   map.set(CoordinateKey.fromCoor({ x: 0, y: 1 }), MapTerrain.Floor);
   map.set(CoordinateKey.fromCoor({ x: 0, y: 2 }), MapTerrain.Floor);
