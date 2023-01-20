@@ -485,5 +485,157 @@ describe("state", () => {
 
       expect(printedMap[2][2]).toEqual("player");
     });
+
+    it("should print a map with fog surrounding it", () => {
+      const width = 13;
+      const height = 13;
+      const gameMap = new Map<CoordinateKey, MapTerrain>();
+
+      for (let x = 0; x < width; x += 1) {
+        for (let y = 0; y < height; y += 1) {
+          gameMap.set(CoordinateKey.fromCoor({ x, y }), MapTerrain.Floor);
+        }
+      }
+
+      const sprites = {
+        player: {
+          type: "player" as const,
+          coordinate: { x: 6, y: 6 },
+          attack: 1,
+          defense: 1,
+          health: 1,
+          level: 1,
+          currExp: 1,
+          maxExp: 1,
+        },
+        healths: new Map(),
+        monsters: new Map(),
+      };
+
+      const state = {
+        isFlashlightOn: true,
+        floor: 1 as const,
+        map: gameMap,
+        sprites,
+      };
+
+      const printedMap = printMap(state, width, height);
+
+      expect(printedMap.length).toEqual(height);
+      printedMap.forEach((row) => {
+        expect(row.length).toEqual(width);
+      });
+
+      const fogCells = new Set<CoordinateKey>(
+        [
+          // top left
+          { x: 0, y: 0 },
+          { x: 1, y: 0 },
+          { x: 2, y: 0 },
+          { x: 0, y: 1 },
+          { x: 1, y: 1 },
+          { x: 0, y: 2 },
+
+          // bottom left
+          { x: 0, y: height - 1 },
+          { x: 1, y: height - 1 },
+          { x: 2, y: height - 1 },
+          { x: 0, y: height - 2 },
+          { x: 1, y: height - 2 },
+          { x: 0, y: height - 3 },
+
+          // top right
+          { x: width - 1, y: 0 },
+          { x: width - 2, y: 0 },
+          { x: width - 3, y: 0 },
+          { x: width - 1, y: 1 },
+          { x: width - 2, y: 1 },
+          { x: width - 1, y: 2 },
+
+          // bottom right
+          { x: width - 1, y: height - 1 },
+          { x: width - 2, y: height - 1 },
+          { x: width - 3, y: height - 1 },
+          { x: width - 1, y: height - 2 },
+          { x: width - 2, y: height - 2 },
+          { x: width - 1, y: height - 3 },
+        ].map((coor) => CoordinateKey.fromCoor(coor))
+      );
+
+      for (let x = 0; x < width; x += 1) {
+        for (let y = 0; y < height; y += 1) {
+          expect(printedMap[y][x], `x: ${x}, y: ${y}`).toEqual(
+            (() => {
+              if (fogCells.has(CoordinateKey.fromCoor({ x, y }))) return "fog";
+
+              if (
+                x === sprites.player.coordinate.x &&
+                y === sprites.player.coordinate.y
+              )
+                return "player";
+
+              return MapTerrain.Floor;
+            })()
+          );
+        }
+      }
+    });
+
+    it("should print a map without fog when isFlashlightOn is false", () => {
+      const width = 13;
+      const height = 13;
+      const gameMap = new Map<CoordinateKey, MapTerrain>();
+
+      for (let x = 0; x < width; x += 1) {
+        for (let y = 0; y < height; y += 1) {
+          gameMap.set(CoordinateKey.fromCoor({ x, y }), MapTerrain.Floor);
+        }
+      }
+
+      const sprites = {
+        player: {
+          type: "player" as const,
+          coordinate: { x: 6, y: 6 },
+          attack: 1,
+          defense: 1,
+          health: 1,
+          level: 1,
+          currExp: 1,
+          maxExp: 1,
+        },
+        healths: new Map(),
+        monsters: new Map(),
+      };
+
+      const state = {
+        isFlashlightOn: false,
+        floor: 1 as const,
+        map: gameMap,
+        sprites,
+      };
+
+      const printedMap = printMap(state, width, height);
+
+      expect(printedMap.length).toEqual(height);
+      printedMap.forEach((row) => {
+        expect(row.length).toEqual(width);
+      });
+
+      for (let x = 0; x < width; x += 1) {
+        for (let y = 0; y < height; y += 1) {
+          expect(printedMap[y][x], `x: ${x}, y: ${y}`).toEqual(
+            (() => {
+              if (
+                x === sprites.player.coordinate.x &&
+                y === sprites.player.coordinate.y
+              )
+                return "player";
+
+              return MapTerrain.Floor;
+            })()
+          );
+        }
+      }
+    });
   });
 });

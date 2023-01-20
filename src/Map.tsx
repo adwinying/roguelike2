@@ -5,7 +5,11 @@ import { Sprite } from "@/game/sprite";
 import { config as gameConfig, printMap } from "@/game/state";
 import useGame from "@/useGame";
 
-function MapCell({ cellType }: { cellType: MapTerrain | Sprite["type"] }) {
+function MapCell({
+  cellType,
+}: {
+  cellType: MapTerrain | Sprite["type"] | "fog";
+}) {
   const cellColor = {
     [MapTerrain.Wall]: "bg-base-content dark:bg-neutral",
     [MapTerrain.Floor]: "bg-base-100 dark:bg-base-content",
@@ -15,6 +19,7 @@ function MapCell({ cellType }: { cellType: MapTerrain | Sprite["type"] }) {
     weapon: "bg-yellow-500",
     exit: "bg-purple-700",
     boss: "bg-red-900",
+    fog: "bg-base-300",
   };
 
   return <td className={`h-4 w-4 ${cellColor[cellType]}`} />;

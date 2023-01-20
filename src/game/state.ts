@@ -147,9 +147,13 @@ export function printMap(state: GameState, width: number, height: number) {
   if (width > mapWidth || height > mapHeight)
     throw new Error("width and height should be less than map size");
 
-  const map: (MapTerrain | Sprite["type"])[][] = [];
+  const map: (MapTerrain | Sprite["type"] | "fog")[][] = [];
   const playerCoor = state.sprites.player.coordinate;
   const spriteCoors = toSpriteMap(state.sprites);
+
+  const surroundingCoors = state.isFlashlightOn
+    ? getSurroundingCellCoors(state.map, state.sprites.player.coordinate)
+    : undefined;
 
   const startX =
     playerCoor.x + Math.floor(width / 2) < mapWidth
@@ -163,12 +167,18 @@ export function printMap(state: GameState, width: number, height: number) {
   for (let x = startX; x < startX + width; x += 1) {
     for (let y = startY; y < startY + height; y += 1) {
       const coorKey = CoordinateKey.fromCoor({ x, y });
+      const printCoorX = x - startX;
+      const printCoorY = y - startY;
+
+      if (surroundingCoors && !surroundingCoors.has(coorKey)) {
+        if (map[printCoorY] === undefined) map[printCoorY] = [];
+        map[printCoorY][printCoorX] = "fog";
+        continue;
+      }
+
       const cellType = spriteCoors.get(coorKey)?.type ?? state.map.get(coorKey);
 
       if (cellType === undefined) throw new Error("Invalid map cell");
-
-      const printCoorX = x - startX;
-      const printCoorY = y - startY;
 
       if (map[printCoorY] === undefined) map[printCoorY] = [];
       map[printCoorY][printCoorX] = cellType;
