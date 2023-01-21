@@ -6,7 +6,7 @@ import Stats from "@/Stats";
 import useGame from "@/useGame";
 
 export default function App() {
-  const { triggerMove } = useGame();
+  const { triggerMove, toggleFlashlight } = useGame();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -27,6 +27,9 @@ export default function App() {
         case "d":
           triggerMove("right");
           break;
+        case "f":
+          toggleFlashlight();
+          break;
         default:
           break;
       }
@@ -35,7 +38,7 @@ export default function App() {
     window.addEventListener("keydown", handleKeyDown);
 
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [triggerMove]);
+  }, [triggerMove, toggleFlashlight]);
 
   return (
     <div className="container mx-auto flex h-screen flex-col items-center justify-center px-3 py-4 text-center">

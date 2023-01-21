@@ -21,6 +21,12 @@ export default function useGame() {
     sendLevelUpToast,
   } = useToast();
 
+  const toggleFlashlight = useCallback(() => {
+    updateGameState((state) => {
+      state.isFlashlightOn = !state.isFlashlightOn;
+    });
+  }, [updateGameState]);
+
   const resetGame = useCallback(
     (overrideLevel?: Floor) => {
       updateGameState((draft) => {
@@ -162,5 +168,6 @@ export default function useGame() {
     sprites,
     gameMap,
     triggerMove,
+    toggleFlashlight,
   };
 }
