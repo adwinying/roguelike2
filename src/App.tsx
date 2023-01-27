@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 
 import Map from "@/Map";
+import ModalVictory from "@/ModalVictory";
 import Stats from "@/Stats";
 import useGame from "@/useGame";
 
@@ -49,6 +50,8 @@ export default function App() {
       <Map className="flex-1" />
 
       <Toaster position="bottom-left" />
+
+      <ModalVictory />
     </div>
   );
 }

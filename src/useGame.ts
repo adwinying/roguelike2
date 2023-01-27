@@ -169,5 +169,6 @@ export default function useGame() {
     gameMap,
     triggerMove,
     toggleFlashlight,
+    resetGame,
   };
 }
