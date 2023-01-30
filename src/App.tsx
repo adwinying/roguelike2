@@ -6,11 +6,17 @@ import ModalDefeat from "@/ModalDefeat";
 import ModalVictory from "@/ModalVictory";
 import Stats from "@/Stats";
 import useGame from "@/useGame";
+import useModal from "@/useModal";
 
 export default function App() {
   const { triggerMove, toggleFlashlight } = useGame();
+  const {
+    modalState: { isVictoryModalActive, isDefeatModalActive },
+  } = useModal();
 
   useEffect(() => {
+    if (isVictoryModalActive || isDefeatModalActive) return () => {};
+
     const handleKeyDown = (event: KeyboardEvent) => {
       switch (event.key) {
         case "ArrowUp":
@@ -40,7 +46,12 @@ export default function App() {
     window.addEventListener("keydown", handleKeyDown);
 
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [triggerMove, toggleFlashlight]);
+  }, [
+    triggerMove,
+    toggleFlashlight,
+    isVictoryModalActive,
+    isDefeatModalActive,
+  ]);
 
   return (
     <div className="container mx-auto flex h-screen flex-col items-center justify-center px-3 py-4 text-center">
