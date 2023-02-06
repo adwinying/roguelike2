@@ -6,6 +6,7 @@ import { computeMove } from "@/game/action";
 import { CoordinateKey } from "@/game/map";
 import { Floor } from "@/game/sprite";
 import { initGameState } from "@/game/state";
+import useModal from "@/useModal";
 import useToast from "@/useToast";
 
 const gameAtom = atomWithImmer(initGameState(1));
@@ -20,6 +21,7 @@ export default function useGame() {
     sendMonsterDefeatToast,
     sendLevelUpToast,
   } = useToast();
+  const { showVictoryModal, showDefeatModal } = useModal();
 
   const toggleFlashlight = useCallback(() => {
     updateGameState((state) => {
@@ -50,12 +52,12 @@ export default function useGame() {
       if (result === undefined) return;
 
       if (result.type === "defeat") {
-        resetGame(1);
+        showDefeatModal();
         return;
       }
 
       if (result.type === "victory") {
-        resetGame(1);
+        showVictoryModal();
         return;
       }
 
@@ -153,6 +155,8 @@ export default function useGame() {
       sprites,
       updateGameState,
       resetGame,
+      showVictoryModal,
+      showDefeatModal,
       sendWeaponToast,
       sendHealthToast,
       sendBattleToast,
