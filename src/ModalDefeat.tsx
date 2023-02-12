@@ -4,12 +4,12 @@ import useModal from "@/useModal";
 export default function ModalDefeat() {
   const { resetGame } = useGame();
   const {
-    modalState: { isDefeatModalActive },
-    hideDefeatModal,
+    modalState: { activeModal },
+    hideModal,
   } = useModal();
 
   return (
-    <div className={`modal ${isDefeatModalActive ? "modal-open" : ""}`}>
+    <div className={`modal ${activeModal === "DEFEAT" ? "modal-open" : ""}`}>
       <div className="modal-box">
         <h2 className="mb-5 text-4xl font-bold">😞 Defeat...</h2>
 
@@ -41,7 +41,7 @@ export default function ModalDefeat() {
           className="btn-primary btn mt-5"
           onClick={() => {
             resetGame(1);
-            hideDefeatModal();
+            hideModal();
           }}
         >
           Play Again?

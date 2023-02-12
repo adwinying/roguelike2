@@ -11,11 +11,11 @@ import useModal from "@/useModal";
 export default function App() {
   const { triggerMove, toggleFlashlight } = useGame();
   const {
-    modalState: { isVictoryModalActive, isDefeatModalActive },
+    modalState: { activeModal },
   } = useModal();
 
   useEffect(() => {
-    if (isVictoryModalActive || isDefeatModalActive) return () => {};
+    if (activeModal !== null) return () => {};
 
     const handleKeyDown = (event: KeyboardEvent) => {
       switch (event.key) {
@@ -46,12 +46,7 @@ export default function App() {
     window.addEventListener("keydown", handleKeyDown);
 
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [
-    triggerMove,
-    toggleFlashlight,
-    isVictoryModalActive,
-    isDefeatModalActive,
-  ]);
+  }, [triggerMove, toggleFlashlight, activeModal]);
 
   return (
     <div className="container mx-auto flex h-screen flex-col items-center justify-center px-3 py-4 text-center">

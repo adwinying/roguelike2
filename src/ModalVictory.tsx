@@ -4,12 +4,12 @@ import useModal from "@/useModal";
 export default function ModalVictory() {
   const { resetGame } = useGame();
   const {
-    modalState: { isVictoryModalActive },
-    hideVictoryModal,
+    modalState: { activeModal },
+    hideModal,
   } = useModal();
 
   return (
-    <div className={`modal ${isVictoryModalActive ? "modal-open" : ""}`}>
+    <div className={`modal ${activeModal === "VICTORY" ? "modal-open" : ""}`}>
       <div className="modal-box">
         <h2 className="mb-5 text-4xl font-bold">🎉 Victory!</h2>
 
@@ -40,7 +40,7 @@ export default function ModalVictory() {
           className="btn-primary btn mt-5"
           onClick={() => {
             resetGame(1);
-            hideVictoryModal();
+            hideModal();
           }}
         >
           Play Again?

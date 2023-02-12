@@ -2,8 +2,7 @@ import { useAtom } from "jotai";
 import { atomWithImmer } from "jotai/immer";
 
 const modalStateAtom = atomWithImmer({
-  isVictoryModalActive: false,
-  isDefeatModalActive: false,
+  activeModal: null as "VICTORY" | "DEFEAT" | "HELP" | null,
 });
 
 export default function useModal() {
@@ -11,33 +10,33 @@ export default function useModal() {
 
   const showVictoryModal = () => {
     setModalState((draft) => {
-      draft.isVictoryModalActive = true;
-    });
-  };
-
-  const hideVictoryModal = () => {
-    setModalState((draft) => {
-      draft.isVictoryModalActive = false;
+      draft.activeModal = "VICTORY";
     });
   };
 
   const showDefeatModal = () => {
     setModalState((draft) => {
-      draft.isDefeatModalActive = true;
+      draft.activeModal = "DEFEAT";
     });
   };
 
-  const hideDefeatModal = () => {
+  const showHelpModal = () => {
     setModalState((draft) => {
-      draft.isDefeatModalActive = false;
+      draft.activeModal = "HELP";
+    });
+  };
+
+  const hideModal = () => {
+    setModalState((draft) => {
+      draft.activeModal = null;
     });
   };
 
   return {
     modalState,
     showVictoryModal,
-    hideVictoryModal,
     showDefeatModal,
-    hideDefeatModal,
+    showHelpModal,
+    hideModal,
   };
 }
