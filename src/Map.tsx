@@ -5,7 +5,7 @@ import { Sprite } from "@/game/sprite";
 import { config as gameConfig, printMap } from "@/game/state";
 import useGame from "@/useGame";
 
-function MapCell({
+export function MapCell({
   cellType,
 }: {
   cellType: MapTerrain | Sprite["type"] | "fog";
