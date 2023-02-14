@@ -3,6 +3,7 @@ import { Toaster } from "react-hot-toast";
 
 import Map from "@/Map";
 import ModalDefeat from "@/ModalDefeat";
+import ModalHelp from "@/ModalHelp";
 import ModalVictory from "@/ModalVictory";
 import Stats from "@/Stats";
 import useGame from "@/useGame";
@@ -12,9 +13,27 @@ export default function App() {
   const { triggerMove, toggleFlashlight } = useGame();
   const {
     modalState: { activeModal },
+    showHelpModal,
+    hideModal,
   } = useModal();
 
   useEffect(() => {
+    if (activeModal === "HELP") {
+      const handleKeyDown = (event: KeyboardEvent) => {
+        switch (event.key) {
+          case "h":
+            hideModal();
+            break;
+          default:
+            break;
+        }
+      };
+
+      window.addEventListener("keydown", handleKeyDown);
+
+      return () => window.removeEventListener("keydown", handleKeyDown);
+    }
+
     if (activeModal !== null) return () => {};
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -38,6 +57,9 @@ export default function App() {
         case "f":
           toggleFlashlight();
           break;
+        case "h":
+          showHelpModal();
+          break;
         default:
           break;
       }
@@ -46,7 +68,7 @@ export default function App() {
     window.addEventListener("keydown", handleKeyDown);
 
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [triggerMove, toggleFlashlight, activeModal]);
+  }, [triggerMove, toggleFlashlight, activeModal, showHelpModal, hideModal]);
 
   return (
     <div className="container mx-auto flex h-screen flex-col items-center justify-center px-3 py-4 text-center">
@@ -61,6 +83,12 @@ export default function App() {
       <ModalVictory />
 
       <ModalDefeat />
+
+      <ModalHelp />
+
+      <div className="mt-3 text-center">
+        Press <kbd className="kbd">h</kbd> for help
+      </div>
     </div>
   );
 }
