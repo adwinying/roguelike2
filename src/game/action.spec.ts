@@ -500,7 +500,7 @@ describe("action", () => {
         player.currExp + monster.exp - player.maxExp
       );
       expect(result?.newMaxExp).toEqual(60);
-      expect(result?.newAttack).toEqual(player.attack + 3);
+      expect(result?.newAttack).toEqual(player.attack + 1);
     });
 
     it("returns battle and player/monster stats when target cell is monster and not defeated", () => {

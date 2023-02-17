@@ -81,11 +81,11 @@ describe("sprite", () => {
 
   describe("getPlayerAttackIncrease", () => {
     it.each([
-      [1, 3],
-      [2, 3],
-      [3, 3],
-      [4, 3],
-      [5, 4],
+      [1, 1],
+      [2, 1],
+      [3, 2],
+      [4, 2],
+      [5, 3],
     ])("at level %i, return attack increase of %i", (level, attack) => {
       const result = getPlayerAttackIncrease(level);
 
@@ -168,15 +168,15 @@ describe("sprite", () => {
       const coordinate = { x: 1, y: 1 };
       const weapon = generateWeapon(floor, coordinate);
 
-      expect(weapon).toEqual({ type: "weapon", coordinate, attack: 3 });
+      expect(weapon).toEqual({ type: "weapon", coordinate, attack: 1 });
     });
 
     it.each([
-      [1, 3],
-      [2, 3],
-      [3, 3],
-      [4, 3],
-      [5, 4],
+      [1, 1],
+      [2, 1],
+      [3, 2],
+      [4, 2],
+      [5, 3],
     ] as [Floor, number][])(
       "should generate a weapon at floor %i with attack %i",
       (floor, attack) => {

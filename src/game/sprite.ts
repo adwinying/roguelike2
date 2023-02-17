@@ -35,7 +35,7 @@ export function generateMonsters(
 export const getPlayerMaxExp = (level: number) =>
   Array.from({ length: level }).reduce((acc: number, _, i) => acc + i * 10, 50);
 export const getPlayerAttackIncrease = (level: number) =>
-  Math.floor(3 * (1 + (level - 1) * 0.1));
+  Math.floor(1 * (1 + (level - 1) * 0.5));
 
 export type Player = {
   readonly type: "player";
@@ -93,7 +93,7 @@ export function generateWeapon(floor: Floor, coordinate: Coordinate): Weapon {
   return {
     type: "weapon" as const,
     coordinate,
-    attack: Math.floor(3 * (1 + (floor - 1) * 0.1)),
+    attack: Math.floor(1 * (1 + (floor - 1) * 0.5)),
   };
 }
 
