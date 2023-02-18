@@ -1,4 +1,5 @@
 import { MapCell } from "./Map";
+import Tip from "./Tip";
 import { MapTerrain } from "./game/map";
 
 import useModal from "@/useModal";
@@ -93,7 +94,7 @@ export default function ModalHelp() {
 
         <h2 className="mb-5 text-4xl font-bold">🔑 Keybindings</h2>
 
-        <dl className="mb-5 grid w-full grid-cols-[max-content_auto] items-center gap-y-6 gap-x-4 text-left">
+        <dl className="mb-8 grid w-full grid-cols-[max-content_auto] items-center gap-y-6 gap-x-4 text-left">
           <dt>
             <kbd className="kbd">▲</kbd>
             <kbd className="kbd">◀︎</kbd>
@@ -117,6 +118,8 @@ export default function ModalHelp() {
           </dt>
           <dd>Toggles this help dialog</dd>
         </dl>
+
+        <Tip />
 
         <button
           type="button"
