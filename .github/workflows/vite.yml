@@ -3,6 +3,11 @@ name: Vite
 on:
   push:
 
+# Allow one concurrent deployment
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
 jobs:
   unit_test:
     name: Unit Test
@@ -23,3 +28,49 @@ jobs:
 
     - name: Run unit tests
       run: npm test
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [unit_test]
+    if: github.ref == 'refs/heads/master'
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v3
+
+    - name: Setup Pages
+      uses: actions/configure-pages@v3
+
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v3
+      with:
+        node-version-file: '.nvmrc'
+        cache: 'npm'
+        check-latest: true
+
+    - name: Install node dependencies
+      run: npm ci
+
+    - name: Build for production
+      run: npm run build
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v1
+      with:
+        path: ./dist
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
