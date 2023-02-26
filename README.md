@@ -14,7 +14,6 @@ Web-based roguelike dungeon game. A rewrite of the first iteration [here](https:
 - [ESlint](https://eslint.org/)
 - [Prettier](https://prettier.io/)
 - [Vitest](https://vitest.dev/)
-- [Cypress](https://www.cypress.io/)
 
 ## Installation
 
